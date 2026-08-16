@@ -145,7 +145,7 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
             hwnd = new WindowInteropHelper(this).EnsureHandle();
         
         var useAggressive = _style == OverlayStyle.Transparent;
-        GameWindowService.ForceTopmost(hwnd, useAggressive);
+        GameWindowService.ForceTopmost(hwnd, false);
         Topmost = true;
     }
 
