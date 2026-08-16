@@ -196,7 +196,7 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
         {
             _overlay.Show();
             _overlay.Topmost = true;
-            _overlay.Activate(); // Bring overlay to front
+            _overlay.Activate(); // Bring overlay to front and give it focus
             State.SetStatus("Config generator overlay shown. F10 toggles.");
         }
     }

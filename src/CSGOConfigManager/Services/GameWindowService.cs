@@ -89,7 +89,7 @@ public sealed class GameWindowService
             NativeMethods.HWND_TOPMOST,
             0, 0, 0, 0,
             NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE |
-            NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_SHOWWINDOW);
+            NativeMethods.SWP_SHOWWINDOW);
     }
 
     public static bool FocusWindow(IntPtr hwnd)

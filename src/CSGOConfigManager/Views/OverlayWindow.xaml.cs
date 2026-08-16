@@ -45,7 +45,7 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         _state = state;
         _botManager = botManager;
         DataContext = this;
-        ShowActivated = false;
+        ShowActivated = true;
         ShowInTaskbar = false;
         WindowStartupLocation = WindowStartupLocation.Manual;
         LoadFromConfigs();
@@ -68,6 +68,9 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         var screenHeight = SystemParameters.PrimaryScreenHeight;
         Left = screenWidth - Width - 20;
         Top = (screenHeight - Height) / 2;
+        
+        // Force window to be topmost
+        Topmost = true;
     }
 
     private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
