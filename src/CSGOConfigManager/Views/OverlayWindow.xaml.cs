@@ -97,6 +97,21 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
             CompositionTarget.Rendering -= OnRendering;
             CompositionTarget.Rendering += OnRendering;
             
+            // Force the overlay to be visible and on top
+            Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() =>
+            {
+                Topmost = true;
+                Activate();
+                BringIntoView();
+                
+                // Additional Windows API call to force focus
+                var hwnd = new WindowInteropHelper(this).Handle;
+                if (hwnd != IntPtr.Zero)
+                {
+                    GameWindowService.FocusWindow(hwnd);
+                }
+            }));
+            
             // Try to automatically convert CS:GO to borderless mode for overlay visibility
             try
             {

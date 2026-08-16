@@ -1,8 +1,9 @@
 using System;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using CSGOConfigManager.Services;
 using CSGOConfigManager.Views;
-using System.Windows;
 
 namespace CSGOConfigManager.ViewModels;
 
@@ -201,7 +202,18 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
         {
             _overlay.Show();
             _overlay.Topmost = true;
-            _overlay.Activate(); // Bring overlay to front and give it focus
+            
+            // Force the overlay to appear on top of the game
+            _overlay.Activate();
+            _overlay.BringIntoView();
+            
+            // Additional Windows API call to force focus
+            var hwnd = new System.Windows.Interop.WindowInteropHelper(_overlay).Handle;
+            if (hwnd != IntPtr.Zero)
+            {
+                GameWindowService.FocusWindow(hwnd);
+            }
+            
             State.SetStatus("Config generator overlay shown. Overlay may require windowed mode. F10 toggles.");
             System.Diagnostics.Debug.WriteLine("Overlay shown and activated");
         }
