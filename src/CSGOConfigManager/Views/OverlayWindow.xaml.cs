@@ -62,6 +62,12 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         ApplyTopmostChrome();
         CompositionTarget.Rendering -= OnRendering;
         CompositionTarget.Rendering += OnRendering;
+        
+        // Position overlay to right side of screen
+        var screenWidth = SystemParameters.PrimaryScreenWidth;
+        var screenHeight = SystemParameters.PrimaryScreenHeight;
+        Left = screenWidth - Width - 20;
+        Top = (screenHeight - Height) / 2;
     }
 
     private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)

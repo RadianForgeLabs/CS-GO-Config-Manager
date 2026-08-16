@@ -73,6 +73,8 @@ public sealed class LaunchService
         var args = string.Empty;
 
         // Add borderless windowed mode args for overlay compatibility
+        // -windowed -noborder makes the game run in borderless windowed mode
+        // which allows the WPF overlay to show on top
         args = "-windowed -noborder";
 
         if (!string.IsNullOrWhiteSpace(settings.CustomLaunchArgs))
@@ -103,14 +105,8 @@ public sealed class LaunchService
 
         var args = string.Empty;
 
-        // Add borderless windowed mode args for overlay compatibility
-        args = "-windowed -noborder";
-
-        if (!string.IsNullOrWhiteSpace(settings.CustomLaunchArgs))
-            args = args + " " + settings.CustomLaunchArgs.Trim();
-
-        if (!string.IsNullOrWhiteSpace(extraArgs))
-            args = args + " " + extraArgs.Trim();
+        // RevLoader does not use arguments - it handles its own configuration
+        // No arguments added to avoid conflicts with RevLoader's internal settings
 
         Process.Start(new ProcessStartInfo
         {
@@ -120,7 +116,7 @@ public sealed class LaunchService
             WorkingDirectory = Path.GetDirectoryName(exe)
         });
 
-        return LaunchResult.Ok($"Launched RevLoader: {exe} {args}");
+        return LaunchResult.Ok($"Launched RevLoader: {exe}");
     }
 }
 
