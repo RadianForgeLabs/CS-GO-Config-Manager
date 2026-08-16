@@ -1,0 +1,43 @@
+<UserControl x:Class="CSGOConfigManager.Views.ProfilesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <DockPanel Margin="8">
+        <TextBlock DockPanel.Dock="Top" Text="Profiles Manager" Style="{StaticResource TitleText}"/>
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,12">
+            <Button Content="Reload" Command="{Binding ReloadCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0"/>
+            <Button Content="Apply" Command="{Binding ApplyCommand}" Style="{StaticResource PrimaryButton}" Margin="0,0,8,0"/>
+            <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0"/>
+            <Button Content="Delete" Command="{Binding DeleteCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0"/>
+            <Button Content="From Current" Command="{Binding CreateFromCurrentCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0"/>
+            <Button Content="Export" Command="{Binding ExportCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0"/>
+            <Button Content="Import" Command="{Binding ImportCommand}" Style="{StaticResource SecondaryButton}"/>
+        </StackPanel>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <ListBox Grid.Column="0" ItemsSource="{Binding Profiles}" SelectedItem="{Binding Selected}"
+                     DisplayMemberPath="Name"/>
+
+            <Border Grid.Column="2" Style="{StaticResource Card}" Margin="0">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top">
+                        <TextBlock Text="Name" Style="{StaticResource SectionTitle}" Margin="0"/>
+                        <TextBox Text="{Binding NewName, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Text="Description" Style="{StaticResource SectionTitle}"/>
+                        <TextBox Text="{Binding NewDescription, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Text="Values (command value per line)" Style="{StaticResource SectionTitle}"/>
+                    </StackPanel>
+                    <TextBox Text="{Binding ValuesPreview, UpdateSourceTrigger=PropertyChanged}"
+                             AcceptsReturn="True" FontFamily="Consolas"
+                             VerticalScrollBarVisibility="Auto"/>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </DockPanel>
+</UserControl>

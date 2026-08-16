@@ -1,0 +1,71 @@
+<UserControl x:Class="CSGOConfigManager.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="8">
+        <StackPanel>
+            <TextBlock Text="Dashboard" Style="{StaticResource TitleText}"/>
+            <TextBlock Text="CS:GO Legacy (1.38.x) Config Manager — RFL Studios" Style="{StaticResource MutedText}" Margin="0,0,0,16"/>
+
+            <UniformGrid Columns="2">
+                <Border Style="{StaticResource Card}" Margin="0,0,8,12">
+                    <StackPanel>
+                        <TextBlock Text="Installation Status" Style="{StaticResource SectionTitle}" Margin="0,0,0,8"/>
+                        <TextBlock Margin="0,4"><Run FontWeight="SemiBold" Text="Steam: "/><Run Text="{Binding SteamStatus, Mode=OneWay}"/></TextBlock>
+                        <TextBlock Margin="0,4"><Run FontWeight="SemiBold" Text="7Launcher: "/><Run Text="{Binding SevenStatus, Mode=OneWay}"/></TextBlock>
+                        <TextBlock Margin="0,4"><Run FontWeight="SemiBold" Text="CS:GO: "/><Run Text="{Binding CsgoStatus, Mode=OneWay}"/></TextBlock>
+                        <TextBlock Margin="0,4"><Run FontWeight="SemiBold" Text="cfg: "/><Run Text="{Binding CfgStatus, Mode=OneWay}"/></TextBlock>
+                        <TextBlock Margin="0,4"><Run FontWeight="SemiBold" Text="Version: "/><Run Text="{Binding VersionStatus, Mode=OneWay}"/></TextBlock>
+                        <TextBlock Margin="0,4"><Run FontWeight="SemiBold" Text="Source: "/><Run Text="{Binding DetectionSource, Mode=OneWay}"/></TextBlock>
+                        <Button Content="Refresh Detection" Command="{Binding RefreshCommand}"
+                                Style="{StaticResource SecondaryButton}" Margin="0,12,0,0" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Card}" Margin="8,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="Quick Launch" Style="{StaticResource SectionTitle}" Margin="0,0,0,8"/>
+                        <Button Content="▶ Launch csgo.exe" Command="{Binding LaunchExeCommand}"
+                                Style="{StaticResource PrimaryButton}" Margin="0,0,0,8" HorizontalAlignment="Stretch"/>
+                        <TextBlock Text="Folders" Style="{StaticResource SectionTitle}"/>
+                        <WrapPanel>
+                            <Button Content="Game Folder" Command="{Binding OpenGameFolderCommand}"
+                                    Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
+                            <Button Content="Config Folder" Command="{Binding OpenCfgFolderCommand}"
+                                    Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
+                            <Button Content="Steam userdata" Command="{Binding OpenUserdataCommand}"
+                                    Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="Detection Log" Style="{StaticResource SectionTitle}" Margin="0,0,0,8"/>
+                    <ItemsControl ItemsSource="{Binding DetectionMessages}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" Style="{StaticResource MutedText}" Margin="0,2"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,12,0,0">
+                <StackPanel>
+                    <TextBlock Text="Config Manager Features" Style="{StaticResource SectionTitle}" Margin="0,0,0,8"/>
+                    <TextBlock Text="• Bot Manager - Configure bot quota, difficulty, team, and behavior" Style="{StaticResource MutedText}" Margin="0,0,0,4" TextWrapping="Wrap"/>
+                    <TextBlock Text="• Practice Settings - Enable sv_cheats, infinite ammo, grenade trajectory, etc." Style="{StaticResource MutedText}" Margin="0,0,0,4" TextWrapping="Wrap"/>
+                    <TextBlock Text="• Game Controls - Quick commands for round management and player abilities" Style="{StaticResource MutedText}" Margin="0,0,0,4" TextWrapping="Wrap"/>
+                    <TextBlock Text="• Config Editor - Edit and manage individual .cfg files" Style="{StaticResource MutedText}" Margin="0,0,0,4" TextWrapping="Wrap"/>
+                    <TextBlock Text="• Game Modes - Apply presets for different game modes" Style="{StaticResource MutedText}" Margin="0,0,0,4" TextWrapping="Wrap"/>
+                    <TextBlock Text="• Overlay (F10) - Real-time config manager that applies to all game modes" Style="{StaticResource MutedText}" Margin="0,0,0,4" TextWrapping="Wrap"/>
+                    <TextBlock Text="All settings apply to: Casual, Competitive, Deathmatch, Arms Race, Demolition, Cooperative, Custom, Practice, and Autoexec" Style="{StaticResource MutedText}" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                    <TextBlock Text="Developed by RFL Studios, a division of RadianForgeLabs" Style="{StaticResource MutedText}" Foreground="#DE9B35" Margin="0,8,0,4" TextWrapping="Wrap"/>
+                    <TextBlock Text="Based on original CS:GO Config Manager (MIT License)" Style="{StaticResource MutedText}" FontSize="10" Foreground="#88A0A0B8" Margin="0,0,0,0" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

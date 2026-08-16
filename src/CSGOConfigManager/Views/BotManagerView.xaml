@@ -1,0 +1,69 @@
+<UserControl x:Class="CSGOConfigManager.Views.BotManagerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="8">
+        <StackPanel MaxWidth="640" HorizontalAlignment="Left">
+            <TextBlock Text="Bot Manager" Style="{StaticResource TitleText}"/>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="Quota" Style="{StaticResource SectionTitle}" Margin="0"/>
+                    <DockPanel Margin="0,8,0,0">
+                        <TextBlock Text="{Binding Quota, StringFormat={}{0} bots}" Width="70" VerticalAlignment="Center"/>
+                        <Slider Minimum="0" Maximum="32" TickFrequency="1" IsSnapToTickEnabled="True"
+                                Value="{Binding Quota}" Margin="8,0,0,0"/>
+                    </DockPanel>
+
+                    <TextBlock Text="Quota Mode" Style="{StaticResource SectionTitle}"/>
+                    <ComboBox ItemsSource="{Binding QuotaModes}" SelectedItem="{Binding QuotaMode}" Width="200" HorizontalAlignment="Left"/>
+
+                    <TextBlock Text="Difficulty (0–3)" Style="{StaticResource SectionTitle}"/>
+                    <DockPanel>
+                        <TextBlock Text="{Binding Difficulty}" Width="30" VerticalAlignment="Center"/>
+                        <Slider Minimum="0" Maximum="3" TickFrequency="1" IsSnapToTickEnabled="True"
+                                Value="{Binding Difficulty}" Margin="8,0,0,0"/>
+                    </DockPanel>
+
+                    <TextBlock Text="Join Team" Style="{StaticResource SectionTitle}"/>
+                    <ComboBox ItemsSource="{Binding JoinTeams}" SelectedItem="{Binding JoinTeam}" Width="200" HorizontalAlignment="Left"/>
+
+                    <CheckBox Content="bot_stop (freeze bots)" IsChecked="{Binding BotStop}" Margin="0,12,0,0"/>
+                    <CheckBox Content="bot_dont_shoot" IsChecked="{Binding DontShoot}"/>
+
+                    <TextBlock Text="Presets" Style="{StaticResource SectionTitle}"/>
+                    <WrapPanel>
+                        <Button Content="T-only" Command="{Binding PresetTOnlyCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
+                        <Button Content="CT-only" Command="{Binding PresetCtOnlyCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
+                        <Button Content="5 Bots" Command="{Binding Preset5Command}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
+                        <Button Content="10 Bots" Command="{Binding Preset10Command}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
+                        <Button Content="Kick All (quota 0)" Command="{Binding KickAllCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
+                    </WrapPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                        <Button Content="Reload" Command="{Binding LoadCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0"/>
+                        <Button Content="Save Bot Settings" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}" Margin="0,0,8,0"/>
+                        <Button Content="Generate &amp; Copy" Command="{Binding GenerateConfigCommand}" Style="{StaticResource AccentButton}" Margin="0,0,8,0"/>
+                        <Button Content="Apply Live" Command="{Binding ApplyLiveCommand}" Style="{StaticResource AccentButton}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,12,0,0">
+                <StackPanel>
+                    <TextBlock Text="Config Status" Style="{StaticResource SectionTitle}" Margin="0,0,0,8"/>
+                    <TextBlock Text="{Binding ConfigStatus}" Style="{StaticResource MutedText}" TextWrapping="Wrap" Margin="0,0,0,8"/>
+
+                    <TextBlock Text="EXEC COMMAND" Style="{StaticResource SectionTitle}" Margin="0,8,0,8"/>
+                    <Border Background="#1E1E1E" Padding="8" Margin="0,0,0,8">
+                        <TextBlock Text="{Binding LastExecCommand}" FontFamily="Consolas" FontSize="14" Foreground="#4EC9B0"/>
+                    </Border>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Copy EXEC Command" Command="{Binding CopyExecCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0"/>
+                        <Button Content="Open Config Folder" Command="{Binding OpenConfigFolderCommand}" Style="{StaticResource SecondaryButton}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

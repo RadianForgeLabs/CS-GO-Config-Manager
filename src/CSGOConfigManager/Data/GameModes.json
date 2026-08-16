@@ -1,0 +1,9 @@
+{
+  "Casual": "gamemode_casual.cfg",
+  "Competitive": "gamemode_competitive.cfg",
+  "Deathmatch": "gamemode_deathmatch.cfg",
+  "ArmsRace": "gamemode_armsrace.cfg",
+  "Demolition": "gamemode_demolition.cfg",
+  "Custom": "gamemode_custom.cfg",
+  "Practice": "gamemode_practice.cfg"
+}

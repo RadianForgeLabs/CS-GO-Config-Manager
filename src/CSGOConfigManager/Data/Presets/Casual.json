@@ -1,0 +1,16 @@
+{
+  "name": "Casual",
+  "description": "Default settings for Casual mode. Balanced gameplay with bots and moderate economy.",
+  "mode": ["Casual"],
+  "settings": {
+    "bot_quota": 10,
+    "bot_difficulty": 1,
+    "mp_warmuptime": 60,
+    "mp_startmoney": 1000,
+    "volume": 0.8,
+    "sensitivity": 2.0,
+    "cl_hud_color": 1,
+    "cl_radar_scale": 0.7,
+    "cl_showfps": 1
+  }
+}

@@ -1,0 +1,32 @@
+<UserControl x:Class="CSGOConfigManager.Views.GameModesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <DockPanel Margin="8">
+        <TextBlock DockPanel.Dock="Top" Text="Game Modes Editor" Style="{StaticResource TitleText}"/>
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,12">
+            <TextBlock Text="Mode:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+            <ComboBox ItemsSource="{Binding Modes}" SelectedItem="{Binding SelectedMode}" Width="180" Margin="0,0,16,0"/>
+            <TextBlock Text="Category:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+            <ComboBox ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}" Width="140" Margin="0,0,16,0"/>
+            <TextBlock Text="Filter:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+            <TextBox Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" Width="180" Margin="0,0,16,0"/>
+            <Button Content="Reload" Command="{Binding ReloadCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0"/>
+            <Button Content="Save Changes" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}"/>
+        </StackPanel>
+
+        <DataGrid ItemsSource="{Binding Commands}" IsReadOnly="False" AutoGenerateColumns="False"
+                  CanUserAddRows="False" HeadersVisibility="Column">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Command" Binding="{Binding Name}" IsReadOnly="True" Width="160"/>
+                <DataGridTextColumn Header="Category" Binding="{Binding Category}" IsReadOnly="True" Width="100"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding Type}" IsReadOnly="True" Width="70"/>
+                <DataGridTextColumn Header="Default" Binding="{Binding DefaultValue}" IsReadOnly="True" Width="80"/>
+                <DataGridTextColumn Header="Current" Binding="{Binding CurrentValue, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                <DataGridTextColumn Header="File" Binding="{Binding File}" IsReadOnly="True" Width="140"/>
+                <DataGridTextColumn Header="Flags" Binding="{Binding FlagsDisplay}" IsReadOnly="True" Width="100"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}" IsReadOnly="True" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

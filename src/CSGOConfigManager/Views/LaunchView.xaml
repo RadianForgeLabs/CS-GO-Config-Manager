@@ -1,0 +1,56 @@
+<UserControl x:Class="CSGOConfigManager.Views.LaunchView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="8">
+        <StackPanel MaxWidth="720" HorizontalAlignment="Left">
+            <TextBlock Text="Launch Center" Style="{StaticResource TitleText}"/>
+
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Launch Method" Style="{StaticResource SectionTitle}" Margin="0,0,0,8"/>
+                    <ComboBox ItemsSource="{Binding Methods}" SelectedItem="{Binding SelectedMethod}" 
+                              Width="200" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+                    
+                    <CheckBox Content="Offline mode (-insecure)" IsChecked="{Binding Offline}" Margin="0,8,0,8"/>
+                    
+                    <TextBlock Text="Extra Arguments" Style="{StaticResource SectionTitle}" Margin="0,8,0,4"/>
+                    <TextBox Text="{Binding ExtraArgs, UpdateSourceTrigger=PropertyChanged}" 
+                             Width="400" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+                    
+                    <WrapPanel Margin="0,8,0,0">
+                        <Button Content="▶ Launch" Command="{Binding LaunchCommand}" 
+                                Style="{StaticResource PrimaryButton}" Margin="0,0,8,8" Width="120"/>
+                        <Button Content="Test Path" Command="{Binding TestPathCommand}" 
+                                Style="{StaticResource SecondaryButton}" Margin="0,0,8,8" Width="120"/>
+                        <Button Content="Save Defaults" Command="{Binding SaveDefaultsCommand}" 
+                                Style="{StaticResource SecondaryButton}" Margin="0,0,8,8" Width="120"/>
+                    </WrapPanel>
+                    
+                    <TextBlock Text="{Binding LastResult}" Style="{StaticResource MutedText}" Margin="0,12,0,0" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Launch with Profile" Style="{StaticResource SectionTitle}" Margin="0,0,0,8"/>
+                    <ComboBox ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedProfile}" 
+                              Width="200" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+                    <Button Content="▶ Launch with Selected Profile" Command="{Binding LaunchWithProfileCommand}" 
+                            Style="{StaticResource PrimaryButton}" Margin="0,8,0,0" HorizontalAlignment="Left" Width="200"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="Launch Information" Style="{StaticResource SectionTitle}" Margin="0,0,0,8"/>
+                    <TextBlock Text="• exe - Launches csgo.exe directly with borderless windowed mode for overlay compatibility" 
+                               Style="{StaticResource MutedText}" TextWrapping="Wrap" Margin="0,4"/>
+                    <TextBlock Text="• Borderless mode (-windowed -noborder) allows the overlay to display on top of the game" 
+                               Style="{StaticResource MutedText}" TextWrapping="Wrap" Margin="0,4"/>
+                    <TextBlock Text="• Offline mode adds -insecure flag (use for practice only)" 
+                               Style="{StaticResource MutedText}" TextWrapping="Wrap" Margin="0,4"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="src\CSGOConfigManager.Core\CSGOConfigManager.Core.csproj" />
+  <Project Path="src\CSGOConfigManager\CSGOConfigManager.csproj" />
+  <Project Path="src\CSGOConfigManager.Tests\CSGOConfigManager.Tests.csproj" />
+</Solution>

@@ -1,0 +1,22 @@
+{
+  "steam": {
+    "name": "Steam",
+    "exe": "steam.exe",
+    "args": "steam://rungameid/4465480"
+  },
+  "7launcher": {
+    "name": "7Launcher",
+    "exe": "7launcher.exe",
+    "args": "--run csgo"
+  },
+  "exe": {
+    "name": "CSGO Executable",
+    "exe": "csgo.exe",
+    "args": ""
+  },
+  "custom": {
+    "name": "Custom",
+    "exe": "",
+    "args": ""
+  }
+}

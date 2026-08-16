@@ -1,0 +1,43 @@
+<UserControl x:Class="CSGOConfigManager.Views.ConfigEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <DockPanel Margin="8">
+        <TextBlock DockPanel.Dock="Top" Text="Config File Editor" Style="{StaticResource TitleText}"/>
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,12">
+            <TextBlock Text="File:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+            <ComboBox ItemsSource="{Binding ConfigFiles}" SelectedItem="{Binding SelectedFile}"
+                      Width="360" Margin="0,0,12,0"
+                      DisplayMemberPath="" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button Content="Reload List" Command="{Binding ReloadListCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0"/>
+            <Button Content="Reload File" Command="{Binding ReloadFileCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0"/>
+            <Button Content="Backup" Command="{Binding BackupCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0"/>
+            <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}"/>
+            <TextBlock Margin="16,0,0,0" VerticalAlignment="Center">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource MutedText}">
+                        <Setter Property="Text" Value=""/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsDirty}" Value="True">
+                                <Setter Property="Text" Value="● Unsaved changes"/>
+                                <Setter Property="Foreground" Value="{StaticResource WarningBrush}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </StackPanel>
+
+        <TextBox Text="{Binding EditorText, UpdateSourceTrigger=PropertyChanged}"
+                 AcceptsReturn="True" AcceptsTab="True"
+                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                 FontFamily="Consolas" FontSize="13"
+                 TextWrapping="NoWrap"/>
+    </DockPanel>
+</UserControl>

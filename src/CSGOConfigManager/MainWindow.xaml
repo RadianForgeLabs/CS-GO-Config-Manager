@@ -1,0 +1,104 @@
+﻿<Window x:Class="CSGOConfigManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:CSGOConfigManager.ViewModels"
+        xmlns:views="clr-namespace:CSGOConfigManager.Views"
+        Title="CS:GO Config Manager — RFL Studios"
+        Height="780" Width="1200"
+        MinHeight="600" MinWidth="960"
+        WindowStartupLocation="CenterScreen">
+    <Window.InputBindings>
+        <KeyBinding Key="F10" Command="{Binding ToggleOverlayCommand}"/>
+    </Window.InputBindings>
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+            <views:HomeView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:LaunchViewModel}">
+            <views:LaunchView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:GameModesViewModel}">
+            <views:GameModesView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:BotManagerViewModel}">
+            <views:BotManagerView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PracticeViewModel}">
+            <views:PracticeView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:CommandBrowserViewModel}">
+            <views:CommandBrowserView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ConfigEditorViewModel}">
+            <views:ConfigEditorView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ProfilesViewModel}">
+            <views:ProfilesView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:BackupsViewModel}">
+            <views:BackupsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+            <views:SettingsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ConflictsViewModel}">
+            <views:ConflictsView/>
+        </DataTemplate>
+    </Window.Resources>
+
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom" Height="28" Padding="12,0">
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusMessage}"/>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock Text="RFL Studios" Foreground="#88A0A0B8" FontSize="11" Margin="0,0,8,0"/>
+            </StatusBarItem>
+        </StatusBar>
+
+        <Border DockPanel.Dock="Left" Width="210" Background="{StaticResource SurfaceBrush}"
+                BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,1,0">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Margin="16,20,16,12">
+                    <TextBlock Text="CS:GO" FontSize="20" FontWeight="Bold" Foreground="{StaticResource AccentBrush}"/>
+                    <TextBlock Text="Config Manager" FontSize="13" Style="{StaticResource MutedText}"/>
+                    <TextBlock Text="Legacy 1.38.x" FontSize="11" Style="{StaticResource MutedText}" Margin="0,4,0,0"/>
+                    <TextBlock Text="RFL Studios" FontSize="10" Foreground="#88A0A0B8" Margin="0,8,0,0"/>
+                </StackPanel>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="0,0,0,16">
+                        <Button Content="🏠  Home" Command="{Binding NavigateCommand}" CommandParameter="Home"
+                                Style="{StaticResource NavButton}"/>
+                        <Button Content="▶  Launch Center" Command="{Binding NavigateCommand}" CommandParameter="Launch"
+                                Style="{StaticResource NavButton}"/>
+                        <Button Content="🎮  Game Modes" Command="{Binding NavigateCommand}" CommandParameter="Modes"
+                                Style="{StaticResource NavButton}"/>
+                        <Button Content="🤖  Bot Manager" Command="{Binding NavigateCommand}" CommandParameter="Bots"
+                                Style="{StaticResource NavButton}"/>
+                        <Button Content="🎯  Practice" Command="{Binding NavigateCommand}" CommandParameter="Practice"
+                                Style="{StaticResource NavButton}"/>
+                        <Button Content="🔎  Commands" Command="{Binding NavigateCommand}" CommandParameter="Commands"
+                                Style="{StaticResource NavButton}"/>
+                        <Button Content="📄  Config Editor" Command="{Binding NavigateCommand}" CommandParameter="Config"
+                                Style="{StaticResource NavButton}"/>
+                        <Button Content="💾  Profiles" Command="{Binding NavigateCommand}" CommandParameter="Profiles"
+                                Style="{StaticResource NavButton}"/>
+                        <Button Content="📦  Backups" Command="{Binding NavigateCommand}" CommandParameter="Backups"
+                                Style="{StaticResource NavButton}"/>
+                        <Button Content="⚔  Conflicts" Command="{Binding NavigateCommand}" CommandParameter="Conflicts"
+                                Style="{StaticResource NavButton}"/>
+                        <Button Content="🪟  Overlay" Command="{Binding NavigateCommand}" CommandParameter="Overlay"
+                                Style="{StaticResource NavButton}"/>
+                        <Button Content="⚙  Settings" Command="{Binding NavigateCommand}" CommandParameter="Settings"
+                                Style="{StaticResource NavButton}"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
+        <Border Background="{StaticResource BgBrush}" Padding="16">
+            <ContentControl Content="{Binding CurrentPage}"/>
+        </Border>
+    </DockPanel>
+</Window>

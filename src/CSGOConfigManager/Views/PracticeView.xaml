@@ -1,0 +1,69 @@
+<UserControl x:Class="CSGOConfigManager.Views.PracticeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="8">
+        <StackPanel MaxWidth="640" HorizontalAlignment="Left">
+            <TextBlock Text="Practice Settings" Style="{StaticResource TitleText}"/>
+            <TextBlock Text="These write primarily to practice.cfg / autoexec. Many require sv_cheats 1."
+                       Style="{StaticResource MutedText}" Margin="0,0,0,12" TextWrapping="Wrap"/>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <CheckBox Content="sv_cheats" IsChecked="{Binding SvCheats}"/>
+                    <CheckBox Content="Grenade trajectory" IsChecked="{Binding GrenadeTrajectory}"/>
+                    <CheckBox Content="Buy anywhere" IsChecked="{Binding BuyAnywhere}"/>
+                    <CheckBox Content="Friendly fire" IsChecked="{Binding FriendlyFire}"/>
+
+                    <TextBlock Text="Infinite Ammo (0/1/2)" Style="{StaticResource SectionTitle}"/>
+                    <DockPanel>
+                        <TextBlock Text="{Binding InfiniteAmmo}" Width="30" VerticalAlignment="Center"/>
+                        <Slider Minimum="0" Maximum="2" TickFrequency="1" IsSnapToTickEnabled="True"
+                                Value="{Binding InfiniteAmmo}"/>
+                    </DockPanel>
+
+                    <TextBlock Text="Show Impacts (0–3)" Style="{StaticResource SectionTitle}"/>
+                    <DockPanel>
+                        <TextBlock Text="{Binding ShowImpacts}" Width="30" VerticalAlignment="Center"/>
+                        <Slider Minimum="0" Maximum="3" TickFrequency="1" IsSnapToTickEnabled="True"
+                                Value="{Binding ShowImpacts}"/>
+                    </DockPanel>
+
+                    <TextBlock Text="Grenade Trajectory Time" Style="{StaticResource SectionTitle}"/>
+                    <DockPanel>
+                        <TextBlock Text="{Binding GrenadeTime, StringFormat={}{0:0.#}s}" Width="50" VerticalAlignment="Center"/>
+                        <Slider Minimum="0" Maximum="60" TickFrequency="1"
+                                Value="{Binding GrenadeTime}"/>
+                    </DockPanel>
+
+                    <TextBlock Text="Warmup Time (seconds)" Style="{StaticResource SectionTitle}"/>
+                    <TextBox Text="{Binding Warmup, UpdateSourceTrigger=PropertyChanged}" Width="120" HorizontalAlignment="Left"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                        <Button Content="Enable Practice Kit" Command="{Binding EnableAllPracticeCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0"/>
+                        <Button Content="Disable Extras" Command="{Binding DisableAllPracticeCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0"/>
+                        <Button Content="Reload" Command="{Binding LoadCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0"/>
+                        <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}" Margin="0,0,8,0"/>
+                        <Button Content="Generate &amp; Copy" Command="{Binding GenerateConfigCommand}" Style="{StaticResource AccentButton}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,12,0,0">
+                <StackPanel>
+                    <TextBlock Text="Config Status" Style="{StaticResource SectionTitle}" Margin="0,0,0,8"/>
+                    <TextBlock Text="{Binding ConfigStatus}" Style="{StaticResource MutedText}" TextWrapping="Wrap" Margin="0,0,0,8"/>
+
+                    <TextBlock Text="EXEC COMMAND" Style="{StaticResource SectionTitle}" Margin="0,8,0,8"/>
+                    <Border Background="#1E1E1E" Padding="8" Margin="0,0,0,8">
+                        <TextBlock Text="{Binding LastExecCommand}" FontFamily="Consolas" FontSize="14" Foreground="#4EC9B0"/>
+                    </Border>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Copy EXEC Command" Command="{Binding CopyExecCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0"/>
+                        <Button Content="Open Config Folder" Command="{Binding OpenConfigFolderCommand}" Style="{StaticResource SecondaryButton}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
