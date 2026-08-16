@@ -49,7 +49,7 @@
                 <TextBlock Text="{Binding StatusMessage}"/>
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
-                <TextBlock Text="⚠️ Insecure Mode Required for Overlay" Foreground="#FF8B0000" FontSize="10" Margin="0,0,8,0"/>
+                <TextBlock Text="⚠️ Overlay may require windowed mode" Foreground="#FF8B0000" FontSize="10" Margin="0,0,8,0"/>
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
                 <TextBlock Text="RFL Studios" Foreground="#88A0A0B8" FontSize="11" Margin="0,0,8,0"/>
@@ -88,7 +88,7 @@
                                 Style="{StaticResource NavButton}"/>
                         <Button Content="⚔  Conflicts" Command="{Binding NavigateCommand}" CommandParameter="Conflicts"
                                 Style="{StaticResource NavButton}"/>
-                        <Button Content="🪟  Overlay" Command="{Binding NavigateCommand}" CommandParameter="Overlay"
+                        <Button Content="🪟  Overlay" Command="{Binding ToggleOverlayCommand}"
                                 Style="{StaticResource NavButton}"/>
                         <Button Content="⚙  Settings" Command="{Binding NavigateCommand}" CommandParameter="Settings"
                                 Style="{StaticResource NavButton}"/>

@@ -199,16 +199,25 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
         _overlay.Show();
         _overlay.Topmost = true;
         
+        System.Diagnostics.Debug.WriteLine("Show() called");
+        
         // Force the overlay to appear on top of the game using aggressive methods
         _overlay.ForceShowWindow();
         _overlay.Activate();
         _overlay.BringIntoView();
+        
+        System.Diagnostics.Debug.WriteLine("ForceShowWindow, Activate, BringIntoView called");
         
         // Additional Windows API call to force focus
         var hwnd = new System.Windows.Interop.WindowInteropHelper(_overlay).Handle;
         if (hwnd != IntPtr.Zero)
         {
             GameWindowService.FocusWindow(hwnd);
+            System.Diagnostics.Debug.WriteLine($"FocusWindow called with hwnd: {hwnd}");
+        }
+        else
+        {
+            System.Diagnostics.Debug.WriteLine("HWND is Zero - window handle not available");
         }
         
         State.SetStatus("Config generator overlay shown. Overlay may require windowed mode. F10 toggles.");
