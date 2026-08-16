@@ -1,11 +1,75 @@
+# Build outputs
 bin/
 obj/
-/packages/
+out/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Tt]est[Rr]esults/
+
+# Visual Studio / Rider
+.vs/
+.rider/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 riderModule.iml
 /_ReSharper.Caches/
-.idea/
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+.nuget/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# User-specific settings
 **/Config/Settings.json
 **/Backups/
 **/Logs/
-*.user
-*.suo
+**/Profiles/
+appsettings*.json
+
+# Build artifacts
+*.dll
+*.exe
+*.pdb
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# Setup and release files
+release/
+*.iss
+publish.ps1
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
