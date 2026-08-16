@@ -119,7 +119,7 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
                     ToggleOverlay();
                 });
             };
-            State.SetStatus("Global F10 hotkey registered successfully. ⚠️ Overlay requires CS:GO in windowed mode (Video Settings).");
+            State.SetStatus("Global F10 hotkey registered successfully. Desktop config generator available.");
         }
         catch (Exception ex)
         {
@@ -215,38 +215,17 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
         // Toggle visibility
         if (_overlay.IsVisible)
         {
-            _overlay.Hide();
-            State.SetStatus("Overlay hidden. Press F10 to show.");
-            System.Diagnostics.Debug.WriteLine("Overlay hidden");
+            _overlay.Close();
+            _overlay = null;
+            State.SetStatus("Config generator closed. Press F10 to open.");
+            System.Diagnostics.Debug.WriteLine("Overlay closed");
         }
         else
         {
             _overlay.Show();
-            _overlay.Topmost = true;
-            
-            System.Diagnostics.Debug.WriteLine("Show() called");
-            
-            // Force the overlay to appear on top of the game using aggressive methods
-            _overlay.ForceShowWindow();
             _overlay.Activate();
-            _overlay.BringIntoView();
-            
-            System.Diagnostics.Debug.WriteLine("ForceShowWindow, Activate, BringIntoView called");
-            
-            // Additional Windows API call to force focus
-            var hwnd = new System.Windows.Interop.WindowInteropHelper(_overlay).Handle;
-            if (hwnd != IntPtr.Zero)
-            {
-                GameWindowService.FocusWindow(hwnd);
-                System.Diagnostics.Debug.WriteLine($"FocusWindow called with hwnd: {hwnd}");
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("HWND is Zero - window handle not available");
-            }
-            
-            State.SetStatus("Config generator overlay shown. ⚠️ Requires CS:GO in windowed mode (Video Settings). F10 toggles.");
-            System.Diagnostics.Debug.WriteLine("Overlay shown and activated");
+            State.SetStatus("Desktop config generator shown. Configure settings, then alt+tab to game.");
+            System.Diagnostics.Debug.WriteLine("Overlay shown");
         }
     }
 

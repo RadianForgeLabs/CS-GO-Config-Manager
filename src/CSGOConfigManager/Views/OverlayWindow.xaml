@@ -4,12 +4,13 @@
         Title="CS:GO Config Manager — RFL Studios"
         WindowStyle="SingleBorderWindow"
         Background="#FF1A1A2E"
-        Topmost="True"
+        Topmost="False"
         ShowInTaskbar="True"
         ShowActivated="True"
-        ResizeMode="NoResize"
+        ResizeMode="CanResize"
         Width="400" Height="500"
-        MinWidth="380" MinHeight="450">
+        MinWidth="380" MinHeight="450"
+        WindowStartupLocation="CenterScreen">
     <Border Background="#FF1A1A2E" CornerRadius="0" BorderBrush="#DE9B35" BorderThickness="2" Padding="16"
             MouseLeftButtonDown="OnDrag">
         <DockPanel>
@@ -17,14 +18,14 @@
                 <Button DockPanel.Dock="Right" Content="✕" Width="32" Height="32" Click="OnClose"
                         Background="#33FFFFFF" Foreground="White" BorderThickness="0" Cursor="Hand" FontSize="16" FontWeight="Bold"/>
                 <StackPanel>
-                    <TextBlock Text="CS:GO Config Overlay" FontWeight="Bold" FontSize="16"
+                    <TextBlock Text="CS:GO Config Manager" FontWeight="Bold" FontSize="16"
                                Foreground="#DE9B35" VerticalAlignment="Center"/>
-                    <TextBlock Text="⚠️ Requires Windowed Mode" Foreground="#FFD700" FontSize="11" Margin="0,2,0,0"/>
+                    <TextBlock Text="Desktop Config Generator" Foreground="#88A0A0B8" FontSize="11" Margin="0,2,0,0"/>
                 </StackPanel>
             </DockPanel>
 
-            <TextBlock DockPanel.Dock="Bottom" Text="⚠️ Windowed Mode Required - F10 to toggle • Settings apply to all game modes instantly" 
-                       Foreground="#FFD700" FontSize="11" Margin="0,12,0,0" TextAlignment="Center" FontWeight="SemiBold"/>
+            <TextBlock DockPanel.Dock="Bottom" Text="Desktop Config Generator - Settings apply to all game modes instantly • Alt+Tab to game" 
+                       Foreground="#88A0A0B8" FontSize="11" Margin="0,12,0,0" TextAlignment="Center" FontWeight="SemiBold"/>
 
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel>

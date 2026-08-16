@@ -14,8 +14,9 @@ using CSGOConfigManager.Core.Services;
 namespace CSGOConfigManager.Views;
 
 /// <summary>
-/// Transparent always-on-top overlay that provides real-time CS:GO config management.
+/// Desktop config generator window for CS:GO configuration management.
 /// All settings apply to all game mode config files.
+/// Use this window on desktop before launching the game.
 /// </summary>
 public partial class OverlayWindow : Window, INotifyPropertyChanged
 {
@@ -41,31 +42,6 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
     public string Status { get => _status; set { _status = value; OnPropertyChanged(); } }
 
     public event PropertyChangedEventHandler? PropertyChanged;
-    
-    // Public method to force window show from MainViewModel
-    public void ForceShowWindow()
-    {
-        var hwnd = new WindowInteropHelper(this).Handle;
-        if (hwnd != IntPtr.Zero)
-        {
-            // Force the window to show using Windows API
-            NativeMethods.ShowWindow(hwnd, NativeMethods.SW_SHOW);
-            NativeMethods.SetForegroundWindow(hwnd);
-            
-            // Move window to ensure it's not off-screen
-            var screenWidth = SystemParameters.PrimaryScreenWidth;
-            var screenHeight = SystemParameters.PrimaryScreenHeight;
-            Left = screenWidth - Width - 20;
-            Top = (screenHeight - Height) / 2;
-            
-            // Set window position to topmost
-            NativeMethods.SetWindowPos(
-                hwnd,
-                NativeMethods.HWND_TOPMOST,
-                (int)Left, (int)Top, (int)Width, (int)Height,
-                NativeMethods.SWP_SHOWWINDOW | NativeMethods.SWP_NOACTIVATE);
-        }
-    }
 
     public OverlayWindow(AppState state, BotManagerViewModel botManager)
     {
@@ -74,25 +50,19 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         _botManager = botManager;
         DataContext = this;
         
-        // Apply normal window behavior (no transparency)
+        // Apply normal window behavior (no topmost, normal desktop window)
         ShowActivated = true;
         ShowInTaskbar = true;
-        WindowStartupLocation = WindowStartupLocation.Manual;
+        WindowStartupLocation = WindowStartupLocation.CenterScreen;
         
         LoadFromConfigs();
-
-        Topmost = true;
 
         Loaded += OnLoaded;
         IsVisibleChanged += OnIsVisibleChanged;
         Closed += OnClosed;
         
-        // Create a timer to continuously enforce topmost status
-        _topmostTimer = new DispatcherTimer
-        {
-            Interval = TimeSpan.FromMilliseconds(100)
-        };
-        _topmostTimer.Tick += (s, e) => EnforceTopmost();
+        // Remove the topmost enforcement timer since we're not trying to be an overlay
+        _topmostTimer = null;
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
@@ -121,56 +91,8 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
 
     private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
-        if (IsVisible)
-        {
-            ApplyTopmostChrome();
-            CompositionTarget.Rendering -= OnRendering;
-            CompositionTarget.Rendering += OnRendering;
-            
-            // Start the topmost enforcement timer
-            _topmostTimer?.Start();
-            
-            // Force the overlay to be visible and on top
-            Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() =>
-            {
-                ForceShowWindow();
-                Topmost = true;
-                Activate();
-                BringIntoView();
-                
-                // Additional Windows API call to force focus
-                var hwnd = new WindowInteropHelper(this).Handle;
-                if (hwnd != IntPtr.Zero)
-                {
-                    GameWindowService.FocusWindow(hwnd);
-                }
-            }));
-            
-            // Try to automatically convert CS:GO to borderless mode for overlay visibility
-            try
-            {
-                var gameWindowService = new GameWindowService();
-                if (gameWindowService.TryFind(out var gameWindow))
-                {
-                    gameWindowService.EnsureBorderless(gameWindow);
-                    Status = "Game converted to borderless mode for overlay visibility.";
-                }
-                else
-                {
-                    Status = "CS:GO not detected. If game is running, it may be in exclusive fullscreen mode preventing overlay visibility.";
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Failed to convert game to borderless: {ex.Message}");
-                Status = "Failed to convert game to borderless mode. Manual windowed mode may be required.";
-            }
-        }
-        else
-        {
-            CompositionTarget.Rendering -= OnRendering;
-            _topmostTimer?.Stop();
-        }
+        // No special visibility handling needed for desktop window
+        // Just show/hide normally
     }
 
     private void OnClosed(object? sender, EventArgs e)
@@ -244,7 +166,7 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         }
     }
 
-    private void OnClose(object sender, RoutedEventArgs e) => Hide();
+    private void OnClose(object sender, RoutedEventArgs e) => Close();
 
     private void OnBotSettingChanged(object sender, RoutedEventArgs e)
     {
