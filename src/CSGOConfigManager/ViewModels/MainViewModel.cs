@@ -1,3 +1,4 @@
+using System;
 using System.Windows.Input;
 using CSGOConfigManager.Services;
 using CSGOConfigManager.Views;
@@ -179,18 +180,22 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
 
     private void ToggleOverlay()
     {
+        System.Diagnostics.Debug.WriteLine($"ToggleOverlay called at {DateTime.Now:HH:mm:ss.fff}");
+        
         if (_overlay is null)
         {
             // Do not set Owner — an owned window stays above the main app
             // but drops behind CS:GO the moment the game is focused.
             _overlay = new OverlayWindow(State, Bots);
-            _overlay.Closed += (_, _) => _overlay = null;
+            // Don't set _overlay to null on close since we use Hide() instead
+            System.Diagnostics.Debug.WriteLine("Created new overlay window");
         }
 
         if (_overlay.IsVisible)
         {
             _overlay.Hide();
             State.SetStatus("Overlay hidden. Press F10 to show.");
+            System.Diagnostics.Debug.WriteLine("Overlay hidden");
         }
         else
         {
@@ -198,6 +203,7 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
             _overlay.Topmost = true;
             _overlay.Activate(); // Bring overlay to front and give it focus
             State.SetStatus("Config generator overlay shown. ⚠️ Insecure mode required. F10 toggles.");
+            System.Diagnostics.Debug.WriteLine("Overlay shown and activated");
         }
     }
 

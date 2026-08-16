@@ -49,7 +49,7 @@ public sealed class GlobalHotkeyService : IDisposable
     {
         if (msg == WM_HOTKEY && wParam.ToInt32() == _hotkeyId)
         {
-            System.Diagnostics.Debug.WriteLine("Global hotkey triggered");
+            System.Diagnostics.Debug.WriteLine($"Global hotkey triggered at {DateTime.Now:HH:mm:ss.fff}");
             HotkeyPressed?.Invoke();
             handled = true;
         }
