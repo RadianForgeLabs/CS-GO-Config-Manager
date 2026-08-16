@@ -38,11 +38,13 @@ public sealed class LaunchService
         // Add borderless windowed mode args for overlay compatibility
         // -windowed -noborder makes the game run in borderless windowed mode
         // which allows the WPF overlay to show on top
-        var borderlessArgs = "-windowed -noborder";
+        var borderlessArgs = "-windowed -noborder -insecure";
         if (string.IsNullOrWhiteSpace(args))
             args = borderlessArgs;
         else if (!args.Contains("-windowed", StringComparison.OrdinalIgnoreCase))
             args = args + " " + borderlessArgs;
+        else if (!args.Contains("-insecure", StringComparison.OrdinalIgnoreCase))
+            args = args + " -insecure";
 
         if (!string.IsNullOrWhiteSpace(settings.CustomLaunchArgs))
             args = args + " " + settings.CustomLaunchArgs.Trim();
@@ -75,7 +77,8 @@ public sealed class LaunchService
         // Add borderless windowed mode args for overlay compatibility
         // -windowed -noborder makes the game run in borderless windowed mode
         // which allows the WPF overlay to show on top
-        args = "-windowed -noborder";
+        // -insecure disables VAC to allow overlay without triggering anti-cheat
+        args = "-windowed -noborder -insecure";
 
         if (!string.IsNullOrWhiteSpace(settings.CustomLaunchArgs))
             args = args + " " + settings.CustomLaunchArgs.Trim();

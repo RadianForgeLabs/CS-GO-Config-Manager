@@ -105,12 +105,12 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
                     ToggleOverlay();
                 });
             };
-            State.SetStatus("Global F10 hotkey registered successfully.");
+            State.SetStatus("Global F10 hotkey registered successfully. ⚠️ Overlay requires insecure mode.");
         }
         catch (Exception ex)
         {
             State.SetStatus($"Failed to register global hotkey: {ex.Message}");
-            System.Windows.MessageBox.Show($"Failed to register global F10 hotkey: {ex.Message}\n\nYou can still toggle the overlay using the Overlay button in the navigation.", "Hotkey Registration Failed", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+            System.Windows.MessageBox.Show($"Failed to register global F10 hotkey: {ex.Message}\n\n⚠️ Note: The overlay requires CS:GO to be launched in insecure mode.\nYou can still toggle the overlay using the Overlay button in the navigation.", "Hotkey Registration Failed", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
         }
 
         Navigate("Home");
@@ -197,7 +197,7 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
             _overlay.Show();
             _overlay.Topmost = true;
             _overlay.Activate(); // Bring overlay to front and give it focus
-            State.SetStatus("Config generator overlay shown. F10 toggles.");
+            State.SetStatus("Config generator overlay shown. ⚠️ Insecure mode required. F10 toggles.");
         }
     }
 

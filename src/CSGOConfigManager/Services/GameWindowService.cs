@@ -80,8 +80,11 @@ public sealed class GameWindowService
     {
         if (overlayHwnd == IntPtr.Zero) return;
 
+        // Use less aggressive topmost setting to avoid triggering anti-cheat
+        // Set WS_EX_TOPMOST without WS_EX_TOOLWINDOW to appear as normal window
         var ex = NativeMethods.GetWindowLong(overlayHwnd, NativeMethods.GWL_EXSTYLE);
-        ex |= NativeMethods.WS_EX_TOPMOST | NativeMethods.WS_EX_TOOLWINDOW;
+        ex |= NativeMethods.WS_EX_TOPMOST;
+        ex &= ~NativeMethods.WS_EX_TOOLWINDOW; // Remove tool window flag
         NativeMethods.SetWindowLong(overlayHwnd, NativeMethods.GWL_EXSTYLE, ex);
 
         NativeMethods.SetWindowPos(

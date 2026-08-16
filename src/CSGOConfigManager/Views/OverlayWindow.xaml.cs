@@ -46,7 +46,7 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         _botManager = botManager;
         DataContext = this;
         ShowActivated = true;
-        ShowInTaskbar = false;
+        ShowInTaskbar = true;
         WindowStartupLocation = WindowStartupLocation.Manual;
         LoadFromConfigs();
 
