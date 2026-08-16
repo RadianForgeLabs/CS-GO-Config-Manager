@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using CSGOConfigManager.Services;
 using CSGOConfigManager.ViewModels;
+using CSGOConfigManager.Core.Services;
 
 namespace CSGOConfigManager.Views;
 
@@ -95,6 +96,21 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
             ApplyTopmostChrome();
             CompositionTarget.Rendering -= OnRendering;
             CompositionTarget.Rendering += OnRendering;
+            
+            // Try to automatically convert CS:GO to borderless mode for overlay visibility
+            try
+            {
+                var gameWindowService = new GameWindowService();
+                if (gameWindowService.TryFind(out var gameWindow))
+                {
+                    gameWindowService.EnsureBorderless(gameWindow);
+                    Status = "Game converted to borderless mode for overlay visibility.";
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Failed to convert game to borderless: {ex.Message}");
+            }
         }
         else
         {

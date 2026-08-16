@@ -38,13 +38,11 @@ public sealed class LaunchService
         // Add borderless windowed mode args for overlay compatibility
         // -windowed -noborder makes the game run in borderless windowed mode
         // which allows the WPF overlay to show on top
-        var borderlessArgs = "-windowed -noborder -insecure";
+        var borderlessArgs = "-windowed -noborder";
         if (string.IsNullOrWhiteSpace(args))
             args = borderlessArgs;
         else if (!args.Contains("-windowed", StringComparison.OrdinalIgnoreCase))
             args = args + " " + borderlessArgs;
-        else if (!args.Contains("-insecure", StringComparison.OrdinalIgnoreCase))
-            args = args + " -insecure";
 
         if (!string.IsNullOrWhiteSpace(settings.CustomLaunchArgs))
             args = args + " " + settings.CustomLaunchArgs.Trim();
@@ -77,8 +75,7 @@ public sealed class LaunchService
         // Add borderless windowed mode args for overlay compatibility
         // -windowed -noborder makes the game run in borderless windowed mode
         // which allows the WPF overlay to show on top
-        // -insecure disables VAC to allow overlay without triggering anti-cheat
-        args = "-windowed -noborder -insecure";
+        args = "-windowed -noborder";
 
         if (!string.IsNullOrWhiteSpace(settings.CustomLaunchArgs))
             args = args + " " + settings.CustomLaunchArgs.Trim();
@@ -108,10 +105,9 @@ public sealed class LaunchService
 
         var args = string.Empty;
 
-        // RevLoader needs windowed mode for overlay to work
-        // Note: If RevLoader has its own config file, these args may be ignored
-        // You may need to configure RevLoader's settings manually
-        args = "-windowed -noborder -insecure";
+        // RevLoader does not support command-line arguments
+        // Users must configure windowed mode in RevLoader's settings manually
+        // if they want the overlay to appear over the game
 
         Process.Start(new ProcessStartInfo
         {
@@ -121,7 +117,7 @@ public sealed class LaunchService
             WorkingDirectory = Path.GetDirectoryName(exe)
         });
 
-        return LaunchResult.Ok($"Launched RevLoader: {exe} {args}");
+        return LaunchResult.Ok($"Launched RevLoader: {exe}");
     }
 }
 
