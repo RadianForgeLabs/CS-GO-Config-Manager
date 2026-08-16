@@ -12,6 +12,7 @@
                         <TextBlock Text="Installation Status" Style="{StaticResource SectionTitle}" Margin="0,0,0,8"/>
                         <TextBlock Margin="0,4"><Run FontWeight="SemiBold" Text="Steam: "/><Run Text="{Binding SteamStatus, Mode=OneWay}"/></TextBlock>
                         <TextBlock Margin="0,4"><Run FontWeight="SemiBold" Text="7Launcher: "/><Run Text="{Binding SevenStatus, Mode=OneWay}"/></TextBlock>
+                        <TextBlock Margin="0,4"><Run FontWeight="SemiBold" Text="RevLoader: "/><Run Text="{Binding RevLoaderStatus, Mode=OneWay}"/></TextBlock>
                         <TextBlock Margin="0,4"><Run FontWeight="SemiBold" Text="CS:GO: "/><Run Text="{Binding CsgoStatus, Mode=OneWay}"/></TextBlock>
                         <TextBlock Margin="0,4"><Run FontWeight="SemiBold" Text="cfg: "/><Run Text="{Binding CfgStatus, Mode=OneWay}"/></TextBlock>
                         <TextBlock Margin="0,4"><Run FontWeight="SemiBold" Text="Version: "/><Run Text="{Binding VersionStatus, Mode=OneWay}"/></TextBlock>
@@ -25,6 +26,10 @@
                     <StackPanel>
                         <TextBlock Text="Quick Launch" Style="{StaticResource SectionTitle}" Margin="0,0,0,8"/>
                         <Button Content="▶ Launch csgo.exe" Command="{Binding LaunchExeCommand}"
+                                Style="{StaticResource PrimaryButton}" Margin="0,0,0,8" HorizontalAlignment="Stretch"/>
+                        <Button Content="▶ Launch 7Launcher" Command="{Binding Launch7LauncherCommand}"
+                                Style="{StaticResource PrimaryButton}" Margin="0,0,0,8" HorizontalAlignment="Stretch"/>
+                        <Button Content="▶ Launch RevLoader" Command="{Binding LaunchRevLoaderCommand}"
                                 Style="{StaticResource PrimaryButton}" Margin="0,0,0,8" HorizontalAlignment="Stretch"/>
                         <TextBlock Text="Folders" Style="{StaticResource SectionTitle}"/>
                         <WrapPanel>

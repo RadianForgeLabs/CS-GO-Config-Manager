@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Windows.Input;
 using CSGOConfigManager.Services;
+using Microsoft.Win32;
 
 namespace CSGOConfigManager.ViewModels;
 
@@ -8,23 +9,29 @@ public sealed class SettingsViewModel : ViewModelBase
 {
     private readonly AppState _state;
     private string _csgoPath = string.Empty;
+    private string _sevenLauncherPath = string.Empty;
+    private string _revLoaderPath = string.Empty;
     private string _customArgs = string.Empty;
     private string _defaultMethod = "exe";
     private bool _autoBackup = true;
-    private bool _offline;
     private int _maxBackups = 50;
     private string _configFileName = "rfl_config.cfg";
 
     public string CsgoPath { get => _csgoPath; set => SetProperty(ref _csgoPath, value); }
+    public string SevenLauncherPath { get => _sevenLauncherPath; set => SetProperty(ref _sevenLauncherPath, value); }
+    public string RevLoaderPath { get => _revLoaderPath; set => SetProperty(ref _revLoaderPath, value); }
     public string CustomArgs { get => _customArgs; set => SetProperty(ref _customArgs, value); }
     public string DefaultMethod { get => _defaultMethod; set => SetProperty(ref _defaultMethod, value); }
     public bool AutoBackup { get => _autoBackup; set => SetProperty(ref _autoBackup, value); }
-    public bool Offline { get => _offline; set => SetProperty(ref _offline, value); }
     public int MaxBackups { get => _maxBackups; set => SetProperty(ref _maxBackups, value); }
     public string ConfigFileName { get => _configFileName; set => SetProperty(ref _configFileName, value); }
 
+    public string[] LaunchMethods { get; } = { "exe", "7launcher", "revloader" };
+
     public ICommand SaveCommand { get; }
     public ICommand BrowseCsgoCommand { get; }
+    public ICommand BrowseSevenLauncherCommand { get; }
+    public ICommand BrowseRevLoaderCommand { get; }
     public ICommand DetectCommand { get; }
     public ICommand VisitWebsiteCommand { get; }
 
@@ -35,15 +42,18 @@ public sealed class SettingsViewModel : ViewModelBase
 
         SaveCommand = new RelayCommand(Save);
         BrowseCsgoCommand = new RelayCommand(() => BrowseFolder(p => CsgoPath = p));
+        BrowseSevenLauncherCommand = new RelayCommand(() => BrowseFile(p => SevenLauncherPath = p, "7Launcher|7launcher.exe|Executables|*.exe"));
+        BrowseRevLoaderCommand = new RelayCommand(() => BrowseFile(p => RevLoaderPath = p, "RevLoader|revLoader.exe|Executables|*.exe"));
         DetectCommand = new RelayCommand(() =>
         {
             // First save current settings
             var s = _state.Services.Settings.Current;
             s.CsgoPath = string.IsNullOrWhiteSpace(CsgoPath) ? null : CsgoPath.Trim();
+            s.SevenLauncherPath = string.IsNullOrWhiteSpace(SevenLauncherPath) ? null : SevenLauncherPath.Trim();
+            s.RevLoaderPath = string.IsNullOrWhiteSpace(RevLoaderPath) ? null : RevLoaderPath.Trim();
             s.CustomLaunchArgs = string.IsNullOrWhiteSpace(CustomArgs) ? null : CustomArgs.Trim();
             s.DefaultLaunchMethod = DefaultMethod;
             s.AutoBackupOnChange = AutoBackup;
-            s.LaunchOffline = Offline;
             s.MaxBackupCount = Math.Clamp(MaxBackups, 5, 500);
             s.ConfigFileName = string.IsNullOrWhiteSpace(ConfigFileName) ? "rfl_config.cfg" : ConfigFileName.Trim();
             _state.Services.Settings.Save(s);
@@ -55,6 +65,8 @@ public sealed class SettingsViewModel : ViewModelBase
             // Fill detected values if empty
             if (string.IsNullOrWhiteSpace(CsgoPath) && _state.Installation.CsgoRootPath is not null)
                 CsgoPath = _state.Installation.CsgoRootPath;
+            if (string.IsNullOrWhiteSpace(SevenLauncherPath) && _state.Installation.SevenLauncherPath is not null)
+                SevenLauncherPath = _state.Installation.SevenLauncherPath;
             
             _state.SetStatus("Game detection refreshed. Paths updated.");
         });
@@ -65,10 +77,11 @@ public sealed class SettingsViewModel : ViewModelBase
     {
         var s = _state.Services.Settings.Load();
         CsgoPath = s.CsgoPath ?? string.Empty;
+        SevenLauncherPath = s.SevenLauncherPath ?? string.Empty;
+        RevLoaderPath = s.RevLoaderPath ?? string.Empty;
         CustomArgs = s.CustomLaunchArgs ?? string.Empty;
         DefaultMethod = s.DefaultLaunchMethod;
         AutoBackup = s.AutoBackupOnChange;
-        Offline = s.LaunchOffline;
         MaxBackups = s.MaxBackupCount;
         ConfigFileName = s.ConfigFileName ?? "rfl_config.cfg";
     }
@@ -77,10 +90,11 @@ public sealed class SettingsViewModel : ViewModelBase
     {
         var s = _state.Services.Settings.Current;
         s.CsgoPath = string.IsNullOrWhiteSpace(CsgoPath) ? null : CsgoPath.Trim();
+        s.SevenLauncherPath = string.IsNullOrWhiteSpace(SevenLauncherPath) ? null : SevenLauncherPath.Trim();
+        s.RevLoaderPath = string.IsNullOrWhiteSpace(RevLoaderPath) ? null : RevLoaderPath.Trim();
         s.CustomLaunchArgs = string.IsNullOrWhiteSpace(CustomArgs) ? null : CustomArgs.Trim();
         s.DefaultLaunchMethod = DefaultMethod;
         s.AutoBackupOnChange = AutoBackup;
-        s.LaunchOffline = Offline;
         s.MaxBackupCount = Math.Clamp(MaxBackups, 5, 500);
         s.ConfigFileName = string.IsNullOrWhiteSpace(ConfigFileName) ? "rfl_config.cfg" : ConfigFileName.Trim();
         _state.Services.Settings.Save(s);
@@ -92,8 +106,16 @@ public sealed class SettingsViewModel : ViewModelBase
 
     private static void BrowseFolder(Action<string> assign)
     {
-        System.Windows.MessageBox.Show("Please manually enter the path in the text box above.", "Browse Folder",
-            System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+        var dialog = new OpenFolderDialog { Title = "Select folder" };
+        if (dialog.ShowDialog() == true)
+            assign(dialog.FolderName);
+    }
+
+    private static void BrowseFile(Action<string> assign, string filter)
+    {
+        var dialog = new OpenFileDialog { Filter = filter };
+        if (dialog.ShowDialog() == true)
+            assign(dialog.FileName);
     }
 
     private void VisitWebsite()

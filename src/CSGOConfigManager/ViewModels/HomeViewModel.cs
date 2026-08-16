@@ -13,6 +13,7 @@ public sealed class HomeViewModel : ViewModelBase
 
     public string SteamStatus => _state.Installation.SteamFound ? $"Found · {_state.Installation.SteamPath}" : "Not found";
     public string SevenStatus => _state.Installation.SevenLauncherFound ? $"Found · {_state.Installation.SevenLauncherPath}" : "Not found";
+    public string RevLoaderStatus => _state.Services.Settings.Current.RevLoaderPath != null && File.Exists(_state.Services.Settings.Current.RevLoaderPath) ? $"Found · {_state.Services.Settings.Current.RevLoaderPath}" : "Not found";
     public string CsgoStatus => _state.Installation.CsgoFound ? $"Found · {_state.Installation.CsgoRootPath}" : "Not found";
     public string CfgStatus => string.IsNullOrWhiteSpace(_state.Installation.CsgoCfgPath) ? "—" : _state.Installation.CsgoCfgPath!;
     public string VersionStatus => string.IsNullOrWhiteSpace(_state.Installation.GameVersion) ? "Unknown" : _state.Installation.GameVersion!;
@@ -21,6 +22,8 @@ public sealed class HomeViewModel : ViewModelBase
 
     public ICommand RefreshCommand { get; }
     public ICommand LaunchExeCommand { get; }
+    public ICommand Launch7LauncherCommand { get; }
+    public ICommand LaunchRevLoaderCommand { get; }
     public ICommand OpenGameFolderCommand { get; }
     public ICommand OpenCfgFolderCommand { get; }
     public ICommand OpenUserdataCommand { get; }
@@ -32,6 +35,8 @@ public sealed class HomeViewModel : ViewModelBase
 
         RefreshCommand = new RelayCommand(Refresh);
         LaunchExeCommand = new RelayCommand(() => Launch("exe"), () => !string.IsNullOrWhiteSpace(_state.Installation.CsgoExePath));
+        Launch7LauncherCommand = new RelayCommand(() => Launch("7launcher"), () => !string.IsNullOrWhiteSpace(_state.Services.Settings.Current.SevenLauncherPath));
+        LaunchRevLoaderCommand = new RelayCommand(() => Launch("revloader"), () => !string.IsNullOrWhiteSpace(_state.Services.Settings.Current.RevLoaderPath));
         OpenGameFolderCommand = new RelayCommand(OpenGameFolder, () => _state.Installation.CsgoFound);
         OpenCfgFolderCommand = new RelayCommand(OpenCfgFolder, () => !string.IsNullOrWhiteSpace(_state.CfgDirectory));
         OpenUserdataCommand = new RelayCommand(OpenUserdata, () => _state.Installation.SteamFound);
@@ -53,6 +58,7 @@ public sealed class HomeViewModel : ViewModelBase
 
         OnPropertyChanged(nameof(SteamStatus));
         OnPropertyChanged(nameof(SevenStatus));
+        OnPropertyChanged(nameof(RevLoaderStatus));
         OnPropertyChanged(nameof(CsgoStatus));
         OnPropertyChanged(nameof(CfgStatus));
         OnPropertyChanged(nameof(VersionStatus));

@@ -8,8 +8,9 @@ public sealed class AppSettings
     public string? SteamPath { get; set; }
     public string? CsgoPath { get; set; }
     public string? SevenLauncherPath { get; set; }
+    public string? RevLoaderPath { get; set; }
     public string? CustomExePath { get; set; }
-    public string DefaultLaunchMethod { get; set; } = "steam";
+    public string DefaultLaunchMethod { get; set; } = "exe";
     public string? CustomLaunchArgs { get; set; }
     public bool AutoBackupOnChange { get; set; } = true;
     public bool LaunchOffline { get; set; }

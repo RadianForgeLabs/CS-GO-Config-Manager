@@ -17,6 +17,8 @@ public sealed class LaunchService
         return method.ToLowerInvariant() switch
         {
             "exe" => LaunchExe(installation, settings, extraArgs, null),
+            "7launcher" => Launch7Launcher(installation, settings, extraArgs),
+            "revloader" => LaunchRevLoader(installation, settings, extraArgs),
             _ => LaunchResult.Fail($"Unknown launch method: {method}")
         };
     }
@@ -42,9 +44,6 @@ public sealed class LaunchService
         else if (!args.Contains("-windowed", StringComparison.OrdinalIgnoreCase))
             args = args + " " + borderlessArgs;
 
-        if (settings.LaunchOffline)
-            args = args + " -insecure";
-
         if (!string.IsNullOrWhiteSpace(settings.CustomLaunchArgs))
             args = args + " " + settings.CustomLaunchArgs.Trim();
 
@@ -60,6 +59,68 @@ public sealed class LaunchService
         });
 
         return LaunchResult.Ok($"Launched csgo.exe: {exe} {args}");
+    }
+
+    private static LaunchResult Launch7Launcher(
+        GameInstallation installation,
+        AppSettings settings,
+        string? extraArgs)
+    {
+        var exe = settings.SevenLauncherPath;
+        if (string.IsNullOrWhiteSpace(exe) || !File.Exists(exe))
+            return LaunchResult.Fail("7Launcher not found. Set the 7Launcher path in Settings.");
+
+        var args = string.Empty;
+
+        // Add borderless windowed mode args for overlay compatibility
+        args = "-windowed -noborder";
+
+        if (!string.IsNullOrWhiteSpace(settings.CustomLaunchArgs))
+            args = args + " " + settings.CustomLaunchArgs.Trim();
+
+        if (!string.IsNullOrWhiteSpace(extraArgs))
+            args = args + " " + extraArgs.Trim();
+
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = exe,
+            Arguments = args,
+            UseShellExecute = true,
+            WorkingDirectory = Path.GetDirectoryName(exe)
+        });
+
+        return LaunchResult.Ok($"Launched 7Launcher: {exe} {args}");
+    }
+
+    private static LaunchResult LaunchRevLoader(
+        GameInstallation installation,
+        AppSettings settings,
+        string? extraArgs)
+    {
+        var exe = settings.RevLoaderPath;
+        if (string.IsNullOrWhiteSpace(exe) || !File.Exists(exe))
+            return LaunchResult.Fail("RevLoader not found. Set the RevLoader path in Settings.");
+
+        var args = string.Empty;
+
+        // Add borderless windowed mode args for overlay compatibility
+        args = "-windowed -noborder";
+
+        if (!string.IsNullOrWhiteSpace(settings.CustomLaunchArgs))
+            args = args + " " + settings.CustomLaunchArgs.Trim();
+
+        if (!string.IsNullOrWhiteSpace(extraArgs))
+            args = args + " " + extraArgs.Trim();
+
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = exe,
+            Arguments = args,
+            UseShellExecute = true,
+            WorkingDirectory = Path.GetDirectoryName(exe)
+        });
+
+        return LaunchResult.Ok($"Launched RevLoader: {exe} {args}");
     }
 }
 
