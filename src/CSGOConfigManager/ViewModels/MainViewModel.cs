@@ -203,7 +203,8 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
             _overlay.Show();
             _overlay.Topmost = true;
             
-            // Force the overlay to appear on top of the game
+            // Force the overlay to appear on top of the game using aggressive methods
+            _overlay.ForceShowWindow();
             _overlay.Activate();
             _overlay.BringIntoView();
             

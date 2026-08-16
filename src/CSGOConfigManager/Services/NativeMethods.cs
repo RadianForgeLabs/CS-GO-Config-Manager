@@ -109,6 +109,7 @@ internal static class NativeMethods
     public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
     public const int SW_RESTORE = 9;
+    public const int SW_SHOW = 5;
 
     [StructLayout(LayoutKind.Sequential)]
     public struct RECT

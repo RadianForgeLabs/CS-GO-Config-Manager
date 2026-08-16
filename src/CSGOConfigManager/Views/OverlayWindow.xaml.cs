@@ -29,6 +29,7 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
     private bool _godMode = false;
     private string _status = "Config Manager Ready";
     private bool _applying;
+    private DispatcherTimer? _topmostTimer;
 
     public BotManagerViewModel BotManager => _botManager;
     public bool SvCheats { get => _svCheats; set { _svCheats = value; OnPropertyChanged(); } }
@@ -40,6 +41,31 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
     public string Status { get => _status; set { _status = value; OnPropertyChanged(); } }
 
     public event PropertyChangedEventHandler? PropertyChanged;
+    
+    // Public method to force window show from MainViewModel
+    public void ForceShowWindow()
+    {
+        var hwnd = new WindowInteropHelper(this).Handle;
+        if (hwnd != IntPtr.Zero)
+        {
+            // Force the window to show using Windows API
+            NativeMethods.ShowWindow(hwnd, NativeMethods.SW_SHOW);
+            NativeMethods.SetForegroundWindow(hwnd);
+            
+            // Move window to ensure it's not off-screen
+            var screenWidth = SystemParameters.PrimaryScreenWidth;
+            var screenHeight = SystemParameters.PrimaryScreenHeight;
+            Left = screenWidth - Width - 20;
+            Top = (screenHeight - Height) / 2;
+            
+            // Set window position to topmost
+            NativeMethods.SetWindowPos(
+                hwnd,
+                NativeMethods.HWND_TOPMOST,
+                (int)Left, (int)Top, (int)Width, (int)Height,
+                NativeMethods.SWP_SHOWWINDOW | NativeMethods.SWP_NOACTIVATE);
+        }
+    }
 
     public OverlayWindow(AppState state, BotManagerViewModel botManager)
     {
@@ -63,6 +89,13 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         Loaded += OnLoaded;
         IsVisibleChanged += OnIsVisibleChanged;
         Closed += OnClosed;
+        
+        // Create a timer to continuously enforce topmost status
+        _topmostTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromMilliseconds(100)
+        };
+        _topmostTimer.Tick += (s, e) => EnforceTopmost();
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
@@ -97,9 +130,13 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
             CompositionTarget.Rendering -= OnRendering;
             CompositionTarget.Rendering += OnRendering;
             
+            // Start the topmost enforcement timer
+            _topmostTimer?.Start();
+            
             // Force the overlay to be visible and on top
             Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() =>
             {
+                ForceShowWindow();
                 Topmost = true;
                 Activate();
                 BringIntoView();
@@ -130,12 +167,30 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         else
         {
             CompositionTarget.Rendering -= OnRendering;
+            _topmostTimer?.Stop();
         }
     }
 
     private void OnClosed(object? sender, EventArgs e)
     {
         CompositionTarget.Rendering -= OnRendering;
+        _topmostTimer?.Stop();
+    }
+
+    private void EnforceTopmost()
+    {
+        if (!IsVisible) return;
+        
+        var hwnd = new WindowInteropHelper(this).Handle;
+        if (hwnd != IntPtr.Zero)
+        {
+            // Force the window to be topmost using Windows API
+            NativeMethods.SetWindowPos(
+                hwnd,
+                NativeMethods.HWND_TOPMOST,
+                0, 0, 0, 0,
+                NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE);
+        }
     }
 
     private void OnRendering(object? sender, EventArgs e) => ApplyTopmostChrome();
