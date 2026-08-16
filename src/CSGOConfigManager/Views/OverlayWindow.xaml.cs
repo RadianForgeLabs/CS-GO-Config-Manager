@@ -239,7 +239,7 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         }
     }
 
-    private void OnClose(object sender, RoutedEventArgs e) => Close();
+    private void OnClose(object sender, RoutedEventArgs e) => Hide();
 
     private void OnBotSettingChanged(object sender, RoutedEventArgs e)
     {

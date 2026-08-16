@@ -96,6 +96,18 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
         NavigateCommand = new RelayCommand(p => Navigate(p?.ToString() ?? "Home"));
         ToggleOverlayCommand = new RelayCommand(ToggleOverlay);
 
+        // Pre-create overlay on startup to avoid creation issues when game has focus
+        try
+        {
+            _overlay = new OverlayWindow(State, Bots);
+            _overlay.Closed += (_, _) => _overlay = null;
+            System.Diagnostics.Debug.WriteLine("Overlay pre-created on startup");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Failed to pre-create overlay: {ex.Message}");
+        }
+
         // Register global F10 hotkey (works even when CS:GO has focus)
         try
         {
@@ -183,45 +195,59 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
     {
         System.Diagnostics.Debug.WriteLine($"ToggleOverlay called at {DateTime.Now:HH:mm:ss.fff}");
         
-        // Always recreate the overlay to ensure fresh window state
-        if (_overlay != null)
+        // If overlay doesn't exist, create it
+        if (_overlay == null)
         {
-            _overlay.Close();
-            _overlay = null;
+            try
+            {
+                _overlay = new OverlayWindow(State, Bots);
+                _overlay.Closed += (_, _) => _overlay = null;
+                System.Diagnostics.Debug.WriteLine("Created new overlay window");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Failed to create overlay: {ex.Message}");
+                State.SetStatus($"Failed to create overlay: {ex.Message}");
+                return;
+            }
         }
         
-        // Create new overlay instance
-        _overlay = new OverlayWindow(State, Bots);
-        _overlay.Closed += (_, _) => _overlay = null;
-        System.Diagnostics.Debug.WriteLine("Created new overlay window");
-        
-        // Show the overlay
-        _overlay.Show();
-        _overlay.Topmost = true;
-        
-        System.Diagnostics.Debug.WriteLine("Show() called");
-        
-        // Force the overlay to appear on top of the game using aggressive methods
-        _overlay.ForceShowWindow();
-        _overlay.Activate();
-        _overlay.BringIntoView();
-        
-        System.Diagnostics.Debug.WriteLine("ForceShowWindow, Activate, BringIntoView called");
-        
-        // Additional Windows API call to force focus
-        var hwnd = new System.Windows.Interop.WindowInteropHelper(_overlay).Handle;
-        if (hwnd != IntPtr.Zero)
+        // Toggle visibility
+        if (_overlay.IsVisible)
         {
-            GameWindowService.FocusWindow(hwnd);
-            System.Diagnostics.Debug.WriteLine($"FocusWindow called with hwnd: {hwnd}");
+            _overlay.Hide();
+            State.SetStatus("Overlay hidden. Press F10 to show.");
+            System.Diagnostics.Debug.WriteLine("Overlay hidden");
         }
         else
         {
-            System.Diagnostics.Debug.WriteLine("HWND is Zero - window handle not available");
+            _overlay.Show();
+            _overlay.Topmost = true;
+            
+            System.Diagnostics.Debug.WriteLine("Show() called");
+            
+            // Force the overlay to appear on top of the game using aggressive methods
+            _overlay.ForceShowWindow();
+            _overlay.Activate();
+            _overlay.BringIntoView();
+            
+            System.Diagnostics.Debug.WriteLine("ForceShowWindow, Activate, BringIntoView called");
+            
+            // Additional Windows API call to force focus
+            var hwnd = new System.Windows.Interop.WindowInteropHelper(_overlay).Handle;
+            if (hwnd != IntPtr.Zero)
+            {
+                GameWindowService.FocusWindow(hwnd);
+                System.Diagnostics.Debug.WriteLine($"FocusWindow called with hwnd: {hwnd}");
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("HWND is Zero - window handle not available");
+            }
+            
+            State.SetStatus("Config generator overlay shown. Overlay may require windowed mode. F10 toggles.");
+            System.Diagnostics.Debug.WriteLine("Overlay shown and activated");
         }
-        
-        State.SetStatus("Config generator overlay shown. Overlay may require windowed mode. F10 toggles.");
-        System.Diagnostics.Debug.WriteLine("Overlay shown and activated");
     }
 
     public void Dispose()
