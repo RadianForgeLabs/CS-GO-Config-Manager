@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -366,6 +367,50 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
             ApplyRoundSettingToAllGameModes("mp_warmuptime", warmupTimeBox.Text);
 
         Status = "All settings applied to all game mode configs.";
+    }
+
+    private async void OnCopyExecCommand(object sender, RoutedEventArgs e)
+    {
+        // Generate config with all current settings and copy exec command
+        // This works without requiring any UI changes
+        var allCommands = new List<string>();
+        
+        // Add bot commands
+        allCommands.AddRange(BotCommands());
+        
+        // Add practice commands
+        allCommands.AddRange(PracticeCommands());
+        
+        // Add round settings from UI text boxes
+        var roundTimeBox = FindName("RoundTimeBox") as System.Windows.Controls.TextBox;
+        var freezeTimeBox = FindName("FreezeTimeBox") as System.Windows.Controls.TextBox;
+        var maxRoundsBox = FindName("MaxRoundsBox") as System.Windows.Controls.TextBox;
+        var warmupTimeBox = FindName("WarmupTimeBox") as System.Windows.Controls.TextBox;
+
+        if (roundTimeBox != null && !string.IsNullOrWhiteSpace(roundTimeBox.Text))
+            allCommands.Add($"mp_roundtime_defuse {roundTimeBox.Text}");
+        if (freezeTimeBox != null && !string.IsNullOrWhiteSpace(freezeTimeBox.Text))
+            allCommands.Add($"mp_freezetime {freezeTimeBox.Text}");
+        if (maxRoundsBox != null && !string.IsNullOrWhiteSpace(maxRoundsBox.Text))
+            allCommands.Add($"mp_maxrounds {maxRoundsBox.Text}");
+        if (warmupTimeBox != null && !string.IsNullOrWhiteSpace(warmupTimeBox.Text))
+            allCommands.Add($"mp_warmuptime {warmupTimeBox.Text}");
+
+        // Apply to all game modes
+        ApplyBotSettingsToAllGameModes();
+        ApplyPracticeSettingsToAllGameModes();
+        
+        if (roundTimeBox != null && !string.IsNullOrWhiteSpace(roundTimeBox.Text))
+            ApplyRoundSettingToAllGameModes("mp_roundtime_defuse", roundTimeBox.Text);
+        if (freezeTimeBox != null && !string.IsNullOrWhiteSpace(freezeTimeBox.Text))
+            ApplyRoundSettingToAllGameModes("mp_freezetime", freezeTimeBox.Text);
+        if (maxRoundsBox != null && !string.IsNullOrWhiteSpace(maxRoundsBox.Text))
+            ApplyRoundSettingToAllGameModes("mp_maxrounds", maxRoundsBox.Text);
+        if (warmupTimeBox != null && !string.IsNullOrWhiteSpace(warmupTimeBox.Text))
+            ApplyRoundSettingToAllGameModes("mp_warmuptime", warmupTimeBox.Text);
+
+        // Generate config and copy exec command
+        await ApplyConfigAsync(allCommands, "Config generated. Exec command copied to clipboard.");
     }
 
     private IEnumerable<string> BotCommands()

@@ -210,6 +210,10 @@
                     <!-- Apply All Button -->
                     <Button Content="🚀 Apply All Settings to All Game Modes" Click="OnApplyAllSettings" Margin="0,8,0,0" Padding="12,8"
                             Background="#DE9B35" Foreground="#1E1E2E" BorderThickness="0" HorizontalAlignment="Stretch" Cursor="Hand" FontSize="13" FontWeight="SemiBold"/>
+
+                    <!-- Copy Exec Command Button -->
+                    <Button Content="📋 Copy Exec Command" Click="OnCopyExecCommand" Margin="0,8,0,0" Padding="12,8"
+                            Background="#333348" Foreground="White" BorderThickness="0" HorizontalAlignment="Stretch" Cursor="Hand" FontSize="12"/>
                 </StackPanel>
             </ScrollViewer>
         </DockPanel>
