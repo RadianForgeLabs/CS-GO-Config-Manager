@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -77,6 +78,14 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         
         // Force window to be topmost
         Topmost = true;
+        
+        // Force the window to appear and stay on top
+        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() =>
+        {
+            Topmost = true;
+            Activate();
+            BringIntoView();
+        }));
     }
 
     private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)

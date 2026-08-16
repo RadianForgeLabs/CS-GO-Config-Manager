@@ -108,8 +108,10 @@ public sealed class LaunchService
 
         var args = string.Empty;
 
-        // RevLoader does not use arguments - it handles its own configuration
-        // No arguments added to avoid conflicts with RevLoader's internal settings
+        // RevLoader needs windowed mode for overlay to work
+        // Note: If RevLoader has its own config file, these args may be ignored
+        // You may need to configure RevLoader's settings manually
+        args = "-windowed -noborder -insecure";
 
         Process.Start(new ProcessStartInfo
         {
@@ -119,7 +121,7 @@ public sealed class LaunchService
             WorkingDirectory = Path.GetDirectoryName(exe)
         });
 
-        return LaunchResult.Ok($"Launched RevLoader: {exe}");
+        return LaunchResult.Ok($"Launched RevLoader: {exe} {args}");
     }
 }
 

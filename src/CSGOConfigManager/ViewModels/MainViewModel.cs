@@ -187,7 +187,7 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
             // Do not set Owner — an owned window stays above the main app
             // but drops behind CS:GO the moment the game is focused.
             _overlay = new OverlayWindow(State, Bots);
-            // Don't set _overlay to null on close since we use Hide() instead
+            _overlay.Closed += (_, _) => _overlay = null;
             System.Diagnostics.Debug.WriteLine("Created new overlay window");
         }
 
