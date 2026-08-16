@@ -69,11 +69,14 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         _style = style;
         DataContext = this;
         
-        ApplyOverlayStyle();
-        
+        // Force simple reliable window properties
+        WindowStyle = WindowStyle.SingleBorderWindow;
+        AllowsTransparency = false;
+        Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(30, 30, 46));
         ShowActivated = true;
         ShowInTaskbar = true;
-        WindowStartupLocation = WindowStartupLocation.Manual;
+        WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        
         LoadFromConfigs();
 
         Topmost = true;
@@ -85,40 +88,11 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
 
     private void ApplyOverlayStyle()
     {
-        switch (_style)
-        {
-            case OverlayStyle.Transparent:
-                WindowStyle = WindowStyle.None;
-                AllowsTransparency = true;
-                Background = System.Windows.Media.Brushes.Transparent;
-                ShowInTaskbar = false;
-                MainBorder.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(204, 30, 30, 46));
-                MainBorder.CornerRadius = new System.Windows.CornerRadius(12);
-                MainBorder.BorderThickness = new System.Windows.Thickness(2);
-                MainBorder.BorderBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(222, 155, 53));
-                break;
-            case OverlayStyle.Minimal:
-                WindowStyle = WindowStyle.SingleBorderWindow;
-                AllowsTransparency = false;
-                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(30, 30, 46));
-                ShowInTaskbar = true;
-                MainBorder.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(30, 30, 46));
-                MainBorder.CornerRadius = new System.Windows.CornerRadius(0);
-                MainBorder.BorderThickness = new System.Windows.Thickness(0);
-                MainBorder.BorderBrush = System.Windows.Media.Brushes.Transparent;
-                break;
-            case OverlayStyle.Normal:
-            default:
-                WindowStyle = WindowStyle.SingleBorderWindow;
-                AllowsTransparency = false;
-                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(30, 30, 46));
-                ShowInTaskbar = true;
-                MainBorder.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(30, 30, 46));
-                MainBorder.CornerRadius = new System.Windows.CornerRadius(0);
-                MainBorder.BorderThickness = new System.Windows.Thickness(0);
-                MainBorder.BorderBrush = System.Windows.Media.Brushes.Transparent;
-                break;
-        }
+        // Simplified - always use normal window for reliability
+        WindowStyle = WindowStyle.SingleBorderWindow;
+        AllowsTransparency = false;
+        Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(30, 30, 46));
+        ShowInTaskbar = true;
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
