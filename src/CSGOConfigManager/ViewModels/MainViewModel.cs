@@ -100,12 +100,17 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
             _hotkeyService = new GlobalHotkeyService(mainWindow, Key.F10);
             _hotkeyService.HotkeyPressed += () =>
             {
-                System.Windows.Application.Current.Dispatcher.Invoke(ToggleOverlay);
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ToggleOverlay();
+                });
             };
+            State.SetStatus("Global F10 hotkey registered successfully.");
         }
         catch (Exception ex)
         {
             State.SetStatus($"Failed to register global hotkey: {ex.Message}");
+            System.Windows.MessageBox.Show($"Failed to register global F10 hotkey: {ex.Message}\n\nYou can still toggle the overlay using the Overlay button in the navigation.", "Hotkey Registration Failed", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
         }
 
         Navigate("Home");
@@ -185,12 +190,13 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
         if (_overlay.IsVisible)
         {
             _overlay.Hide();
-            State.SetStatus("Overlay hidden.");
+            State.SetStatus("Overlay hidden. Press F10 to show.");
         }
         else
         {
             _overlay.Show();
             _overlay.Topmost = true;
+            _overlay.Activate(); // Bring overlay to front
             State.SetStatus("Config generator overlay shown. F10 toggles.");
         }
     }

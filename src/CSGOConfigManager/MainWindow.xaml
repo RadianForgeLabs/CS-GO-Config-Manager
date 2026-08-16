@@ -7,9 +7,6 @@
         Height="780" Width="1200"
         MinHeight="600" MinWidth="960"
         WindowStartupLocation="CenterScreen">
-    <Window.InputBindings>
-        <KeyBinding Key="F10" Command="{Binding ToggleOverlayCommand}"/>
-    </Window.InputBindings>
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:HomeViewModel}">
             <views:HomeView/>

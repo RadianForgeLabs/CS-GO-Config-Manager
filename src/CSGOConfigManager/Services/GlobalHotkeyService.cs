@@ -35,7 +35,8 @@ public sealed class GlobalHotkeyService : IDisposable
 
         if (!RegisterHotKey(_hwnd, _hotkeyId, mod, (uint)vk))
         {
-            throw new InvalidOperationException($"Failed to register global hotkey {key} with modifiers {modifiers}. It may already be in use.");
+            var error = Marshal.GetLastWin32Error();
+            throw new InvalidOperationException($"Failed to register global hotkey {key} with modifiers {modifiers}. Error code: {error}. It may already be in use.");
         }
 
         var source = HwndSource.FromHwnd(_hwnd)
@@ -48,6 +49,7 @@ public sealed class GlobalHotkeyService : IDisposable
     {
         if (msg == WM_HOTKEY && wParam.ToInt32() == _hotkeyId)
         {
+            System.Diagnostics.Debug.WriteLine("Global hotkey triggered");
             HotkeyPressed?.Invoke();
             handled = true;
         }
