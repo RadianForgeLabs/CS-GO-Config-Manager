@@ -119,12 +119,12 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
                     ToggleOverlay();
                 });
             };
-            State.SetStatus("Global F10 hotkey registered successfully. Overlay may require windowed mode.");
+            State.SetStatus("Global F10 hotkey registered successfully. ⚠️ Overlay requires CS:GO in windowed mode (Video Settings).");
         }
         catch (Exception ex)
         {
             State.SetStatus($"Failed to register global hotkey: {ex.Message}");
-            System.Windows.MessageBox.Show($"Failed to register global F10 hotkey: {ex.Message}\n\nNote: The overlay may require CS:GO to be launched in windowed mode.\nYou can still toggle the overlay using the Overlay button in the navigation.", "Hotkey Registration Failed", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+            System.Windows.MessageBox.Show($"Failed to register global F10 hotkey: {ex.Message}\n\n⚠️ IMPORTANT: The overlay requires CS:GO to be in windowed mode.\nSet \"Display Mode\" to \"Windowed\" or \"Windowed Fullscreen\" in CS:GO Video Settings.\nYou can still toggle the overlay using the Overlay button in the navigation.", "Hotkey Registration Failed", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
         }
 
         Navigate("Home");
@@ -245,7 +245,7 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
                 System.Diagnostics.Debug.WriteLine("HWND is Zero - window handle not available");
             }
             
-            State.SetStatus("Config generator overlay shown. Overlay may require windowed mode. F10 toggles.");
+            State.SetStatus("Config generator overlay shown. ⚠️ Requires CS:GO in windowed mode (Video Settings). F10 toggles.");
             System.Diagnostics.Debug.WriteLine("Overlay shown and activated");
         }
     }

@@ -155,10 +155,15 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
                     gameWindowService.EnsureBorderless(gameWindow);
                     Status = "Game converted to borderless mode for overlay visibility.";
                 }
+                else
+                {
+                    Status = "CS:GO not detected. If game is running, it may be in exclusive fullscreen mode preventing overlay visibility.";
+                }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Failed to convert game to borderless: {ex.Message}");
+                Status = "Failed to convert game to borderless mode. Manual windowed mode may be required.";
             }
         }
         else

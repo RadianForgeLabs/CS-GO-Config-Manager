@@ -38,6 +38,7 @@ public sealed class LaunchService
         // Add borderless windowed mode args for overlay compatibility
         // -windowed -noborder makes the game run in borderless windowed mode
         // which allows the WPF overlay to show on top
+        // This does NOT require insecure mode, so match creation should work
         var borderlessArgs = "-windowed -noborder";
         if (string.IsNullOrWhiteSpace(args))
             args = borderlessArgs;
@@ -75,6 +76,7 @@ public sealed class LaunchService
         // Add borderless windowed mode args for overlay compatibility
         // -windowed -noborder makes the game run in borderless windowed mode
         // which allows the WPF overlay to show on top
+        // This does NOT require insecure mode, so match creation should work
         args = "-windowed -noborder";
 
         if (!string.IsNullOrWhiteSpace(settings.CustomLaunchArgs))

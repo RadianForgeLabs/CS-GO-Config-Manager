@@ -49,7 +49,7 @@
                 <TextBlock Text="{Binding StatusMessage}"/>
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
-                <TextBlock Text="⚠️ Overlay may require windowed mode" Foreground="#FF8B0000" FontSize="10" Margin="0,0,8,0"/>
+                <TextBlock Text="⚠️ Overlay requires CS:GO in windowed mode (Video Settings)" Foreground="#FFD700" FontSize="10" Margin="0,0,8,0"/>
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
                 <TextBlock Text="RFL Studios" Foreground="#88A0A0B8" FontSize="11" Margin="0,0,8,0"/>
