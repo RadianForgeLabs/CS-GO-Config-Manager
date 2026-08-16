@@ -183,41 +183,36 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
     {
         System.Diagnostics.Debug.WriteLine($"ToggleOverlay called at {DateTime.Now:HH:mm:ss.fff}");
         
-        if (_overlay is null)
+        // Always recreate the overlay to ensure fresh window state
+        if (_overlay != null)
         {
-            // Do not set Owner — an owned window stays above the main app
-            // but drops behind CS:GO the moment the game is focused.
-            _overlay = new OverlayWindow(State, Bots);
-            _overlay.Closed += (_, _) => _overlay = null;
-            System.Diagnostics.Debug.WriteLine("Created new overlay window");
+            _overlay.Close();
+            _overlay = null;
         }
-
-        if (_overlay.IsVisible)
+        
+        // Create new overlay instance
+        _overlay = new OverlayWindow(State, Bots);
+        _overlay.Closed += (_, _) => _overlay = null;
+        System.Diagnostics.Debug.WriteLine("Created new overlay window");
+        
+        // Show the overlay
+        _overlay.Show();
+        _overlay.Topmost = true;
+        
+        // Force the overlay to appear on top of the game using aggressive methods
+        _overlay.ForceShowWindow();
+        _overlay.Activate();
+        _overlay.BringIntoView();
+        
+        // Additional Windows API call to force focus
+        var hwnd = new System.Windows.Interop.WindowInteropHelper(_overlay).Handle;
+        if (hwnd != IntPtr.Zero)
         {
-            _overlay.Hide();
-            State.SetStatus("Overlay hidden. Press F10 to show.");
-            System.Diagnostics.Debug.WriteLine("Overlay hidden");
+            GameWindowService.FocusWindow(hwnd);
         }
-        else
-        {
-            _overlay.Show();
-            _overlay.Topmost = true;
-            
-            // Force the overlay to appear on top of the game using aggressive methods
-            _overlay.ForceShowWindow();
-            _overlay.Activate();
-            _overlay.BringIntoView();
-            
-            // Additional Windows API call to force focus
-            var hwnd = new System.Windows.Interop.WindowInteropHelper(_overlay).Handle;
-            if (hwnd != IntPtr.Zero)
-            {
-                GameWindowService.FocusWindow(hwnd);
-            }
-            
-            State.SetStatus("Config generator overlay shown. Overlay may require windowed mode. F10 toggles.");
-            System.Diagnostics.Debug.WriteLine("Overlay shown and activated");
-        }
+        
+        State.SetStatus("Config generator overlay shown. Overlay may require windowed mode. F10 toggles.");
+        System.Diagnostics.Debug.WriteLine("Overlay shown and activated");
     }
 
     public void Dispose()

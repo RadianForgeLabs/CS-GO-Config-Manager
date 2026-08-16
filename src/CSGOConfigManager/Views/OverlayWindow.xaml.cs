@@ -74,12 +74,9 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         _botManager = botManager;
         DataContext = this;
         
-        // Apply original transparent window behavior
-        WindowStyle = WindowStyle.None;
-        AllowsTransparency = true;
-        Background = System.Windows.Media.Brushes.Transparent;
-        ShowActivated = false;
-        ShowInTaskbar = false;
+        // Apply normal window behavior (no transparency)
+        ShowActivated = true;
+        ShowInTaskbar = true;
         WindowStartupLocation = WindowStartupLocation.Manual;
         
         LoadFromConfigs();
@@ -242,7 +239,7 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         }
     }
 
-    private void OnClose(object sender, RoutedEventArgs e) => Hide();
+    private void OnClose(object sender, RoutedEventArgs e) => Close();
 
     private void OnBotSettingChanged(object sender, RoutedEventArgs e)
     {
