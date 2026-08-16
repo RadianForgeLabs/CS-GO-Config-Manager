@@ -24,6 +24,7 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
     private bool _grenadeTrajectory = true;
     private bool _buyAnywhere = true;
     private bool _showImpacts = true;
+    private bool _godMode = false;
     private string _status = "Config Manager Ready";
     private bool _applying;
 
@@ -33,6 +34,7 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
     public bool GrenadeTrajectory { get => _grenadeTrajectory; set { _grenadeTrajectory = value; OnPropertyChanged(); } }
     public bool BuyAnywhere { get => _buyAnywhere; set { _buyAnywhere = value; OnPropertyChanged(); } }
     public bool ShowImpacts { get => _showImpacts; set { _showImpacts = value; OnPropertyChanged(); } }
+    public bool GodMode { get => _godMode; set { _godMode = value; OnPropertyChanged(); } }
     public string Status { get => _status; set { _status = value; OnPropertyChanged(); } }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -110,6 +112,7 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         GrenadeTrajectory = IsOn(_state.Services.Config.GetCurrentValue(cfg, "sv_grenade_trajectory"));
         BuyAnywhere = IsOn(_state.Services.Config.GetCurrentValue(cfg, "mp_buy_anywhere"));
         ShowImpacts = (_state.Services.Config.GetCurrentValue(cfg, "sv_showimpacts") ?? "0") is not "0";
+        GodMode = IsOn(_state.Services.Config.GetCurrentValue(cfg, "god"));
     }
 
     private void OnDrag(object sender, MouseButtonEventArgs e)
@@ -193,7 +196,8 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
                 ["sv_infinite_ammo"] = InfiniteAmmo ? "1" : "0",
                 ["sv_grenade_trajectory"] = GrenadeTrajectory ? "1" : "0",
                 ["mp_buy_anywhere"] = BuyAnywhere ? "1" : "0",
-                ["sv_showimpacts"] = ShowImpacts ? "1" : "0"
+                ["sv_showimpacts"] = ShowImpacts ? "1" : "0",
+                ["god"] = GodMode ? "1" : "0"
             };
 
             // Apply to all game mode config files
@@ -257,7 +261,8 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
             ["sv_infinite_ammo"] = InfiniteAmmo ? "1" : "0",
             ["sv_grenade_trajectory"] = GrenadeTrajectory ? "1" : "0",
             ["mp_buy_anywhere"] = BuyAnywhere ? "1" : "0",
-            ["sv_showimpacts"] = ShowImpacts ? "1" : "0"
+            ["sv_showimpacts"] = ShowImpacts ? "1" : "0",
+            ["god"] = GodMode ? "1" : "0"
         }, "Practice settings written to cfg.");
 
         ApplyPracticeSettingsToAllGameModes();
@@ -430,6 +435,7 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         yield return $"sv_grenade_trajectory {(GrenadeTrajectory ? "1" : "0")}";
         yield return $"mp_buy_anywhere {(BuyAnywhere ? "1" : "0")}";
         yield return $"sv_showimpacts {(ShowImpacts ? "1" : "0")}";
+        yield return $"god {(GodMode ? "1" : "0")}";
     }
 
     private async Task ApplyConfigAsync(IEnumerable<string> commands, string okMessage)

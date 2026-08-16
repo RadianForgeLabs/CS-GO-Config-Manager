@@ -35,13 +35,6 @@
 
             <Border Style="{StaticResource Card}">
                 <StackPanel>
-                    <TextBlock Text="Steam Path" Style="{StaticResource SectionTitle}" Margin="0"/>
-                    <DockPanel>
-                        <Button DockPanel.Dock="Right" Content="Browse" Command="{Binding BrowseSteamCommand}"
-                                Style="{StaticResource SecondaryButton}" Margin="8,0,0,0"/>
-                        <TextBox Text="{Binding SteamPath, UpdateSourceTrigger=PropertyChanged}"/>
-                    </DockPanel>
-
                     <TextBlock Text="CS:GO Path" Style="{StaticResource SectionTitle}"/>
                     <DockPanel>
                         <Button DockPanel.Dock="Right" Content="Browse" Command="{Binding BrowseCsgoCommand}"
@@ -49,27 +42,8 @@
                         <TextBox Text="{Binding CsgoPath, UpdateSourceTrigger=PropertyChanged}"/>
                     </DockPanel>
 
-                    <TextBlock Text="7Launcher Executable" Style="{StaticResource SectionTitle}"/>
-                    <DockPanel>
-                        <Button DockPanel.Dock="Right" Content="Browse" Command="{Binding BrowseSevenCommand}"
-                                Style="{StaticResource SecondaryButton}" Margin="8,0,0,0"/>
-                        <TextBox Text="{Binding SevenPath, UpdateSourceTrigger=PropertyChanged}"/>
-                    </DockPanel>
-
-                    <TextBlock Text="Custom Executable" Style="{StaticResource SectionTitle}"/>
-                    <DockPanel>
-                        <Button DockPanel.Dock="Right" Content="Browse" Command="{Binding BrowseCustomCommand}"
-                                Style="{StaticResource SecondaryButton}" Margin="8,0,0,0"/>
-                        <TextBox Text="{Binding CustomExe, UpdateSourceTrigger=PropertyChanged}"/>
-                    </DockPanel>
-
                     <TextBlock Text="Custom Launch Args" Style="{StaticResource SectionTitle}"/>
                     <TextBox Text="{Binding CustomArgs, UpdateSourceTrigger=PropertyChanged}"/>
-
-                    <TextBlock Text="Default Launch Method" Style="{StaticResource SectionTitle}"/>
-                    <ComboBox Width="200" HorizontalAlignment="Left"
-                              ItemsSource="{Binding LaunchMethods}"
-                              SelectedItem="{Binding DefaultMethod}"/>
 
                     <CheckBox Content="Auto-backup before overwriting configs" IsChecked="{Binding AutoBackup}" Margin="0,16,0,0"/>
                     <CheckBox Content="Prefer offline / insecure launch" IsChecked="{Binding Offline}"/>

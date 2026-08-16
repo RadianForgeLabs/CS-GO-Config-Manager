@@ -24,7 +24,7 @@
                 </StackPanel>
             </DockPanel>
 
-            <TextBlock DockPanel.Dock="Bottom" Text="F10 to toggle • Settings apply to all game modes" 
+            <TextBlock DockPanel.Dock="Bottom" Text="F10 to toggle • Settings apply to all game modes instantly" 
                        Foreground="#88A0A0B8" FontSize="11" Margin="0,12,0,0" TextAlignment="Center"/>
 
             <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -110,6 +110,7 @@
                             <CheckBox Content="Grenade Trajectory" IsChecked="{Binding GrenadeTrajectory}" Foreground="White" Margin="0,4" Checked="OnPracticeSettingChanged" Unchecked="OnPracticeSettingChanged"/>
                             <CheckBox Content="Buy Anywhere" IsChecked="{Binding BuyAnywhere}" Foreground="White" Margin="0,4" Checked="OnPracticeSettingChanged" Unchecked="OnPracticeSettingChanged"/>
                             <CheckBox Content="Show Impacts" IsChecked="{Binding ShowImpacts}" Foreground="White" Margin="0,4" Checked="OnPracticeSettingChanged" Unchecked="OnPracticeSettingChanged"/>
+                            <CheckBox Content="God Mode" IsChecked="{Binding GodMode}" Foreground="White" Margin="0,4" Checked="OnPracticeSettingChanged" Unchecked="OnPracticeSettingChanged"/>
                         </StackPanel>
                     </Border>
 
