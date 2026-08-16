@@ -19,4 +19,5 @@ public sealed class AppSettings
     public int MaxBackupCount { get; set; } = 50;
     public bool MinimizeToTrayOnLaunch { get; set; }
     public string ConfigFileName { get; set; } = "rfl_config.cfg";
+    public string OverlayDisplayMethod { get; set; } = "NormalWindow";
 }

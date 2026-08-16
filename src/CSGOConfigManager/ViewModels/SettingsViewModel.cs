@@ -16,6 +16,7 @@ public sealed class SettingsViewModel : ViewModelBase
     private bool _autoBackup = true;
     private int _maxBackups = 50;
     private string _configFileName = "rfl_config.cfg";
+    private string _overlayDisplayMethod = "NormalWindow";
 
     public string CsgoPath { get => _csgoPath; set => SetProperty(ref _csgoPath, value); }
     public string SevenLauncherPath { get => _sevenLauncherPath; set => SetProperty(ref _sevenLauncherPath, value); }
@@ -25,8 +26,10 @@ public sealed class SettingsViewModel : ViewModelBase
     public bool AutoBackup { get => _autoBackup; set => SetProperty(ref _autoBackup, value); }
     public int MaxBackups { get => _maxBackups; set => SetProperty(ref _maxBackups, value); }
     public string ConfigFileName { get => _configFileName; set => SetProperty(ref _configFileName, value); }
+    public string OverlayDisplayMethod { get => _overlayDisplayMethod; set => SetProperty(ref _overlayDisplayMethod, value); }
 
     public string[] LaunchMethods { get; } = { "exe", "7launcher", "revloader" };
+    public string[] OverlayDisplayMethods { get; } = { "NormalWindow", "TransparentWindow", "MinimalWindow" };
 
     public ICommand SaveCommand { get; }
     public ICommand BrowseCsgoCommand { get; }
@@ -56,6 +59,7 @@ public sealed class SettingsViewModel : ViewModelBase
             s.AutoBackupOnChange = AutoBackup;
             s.MaxBackupCount = Math.Clamp(MaxBackups, 5, 500);
             s.ConfigFileName = string.IsNullOrWhiteSpace(ConfigFileName) ? "rfl_config.cfg" : ConfigFileName.Trim();
+            s.OverlayDisplayMethod = OverlayDisplayMethod;
             _state.Services.Settings.Save(s);
             
             // Then refresh detection
@@ -84,6 +88,7 @@ public sealed class SettingsViewModel : ViewModelBase
         AutoBackup = s.AutoBackupOnChange;
         MaxBackups = s.MaxBackupCount;
         ConfigFileName = s.ConfigFileName ?? "rfl_config.cfg";
+        OverlayDisplayMethod = s.OverlayDisplayMethod ?? "NormalWindow";
     }
 
     private void Save()
@@ -97,6 +102,7 @@ public sealed class SettingsViewModel : ViewModelBase
         s.AutoBackupOnChange = AutoBackup;
         s.MaxBackupCount = Math.Clamp(MaxBackups, 5, 500);
         s.ConfigFileName = string.IsNullOrWhiteSpace(ConfigFileName) ? "rfl_config.cfg" : ConfigFileName.Trim();
+        s.OverlayDisplayMethod = OverlayDisplayMethod;
         _state.Services.Settings.Save(s);
         _state.RefreshDetection();
         _state.SetStatus("Settings saved.");

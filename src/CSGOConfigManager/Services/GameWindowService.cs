@@ -76,15 +76,24 @@ public sealed class GameWindowService
         return true;
     }
 
-    public static void ForceTopmost(IntPtr overlayHwnd)
+    public static void ForceTopmost(IntPtr overlayHwnd, bool useAggressive = false)
     {
         if (overlayHwnd == IntPtr.Zero) return;
 
         // Use less aggressive topmost setting to avoid triggering anti-cheat
-        // Set WS_EX_TOPMOST without WS_EX_TOOLWINDOW to appear as normal window
+        // unless aggressive mode is requested for transparent overlays
         var ex = NativeMethods.GetWindowLong(overlayHwnd, NativeMethods.GWL_EXSTYLE);
         ex |= NativeMethods.WS_EX_TOPMOST;
-        ex &= ~NativeMethods.WS_EX_TOOLWINDOW; // Remove tool window flag
+        
+        if (useAggressive)
+        {
+            ex |= NativeMethods.WS_EX_TOOLWINDOW; // Use tool window for transparent overlays
+        }
+        else
+        {
+            ex &= ~NativeMethods.WS_EX_TOOLWINDOW; // Remove tool window flag for normal windows
+        }
+        
         NativeMethods.SetWindowLong(overlayHwnd, NativeMethods.GWL_EXSTYLE, ex);
 
         NativeMethods.SetWindowPos(

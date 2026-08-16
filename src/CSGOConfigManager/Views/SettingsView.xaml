@@ -64,6 +64,11 @@
                               ItemsSource="{Binding LaunchMethods}"
                               SelectedItem="{Binding DefaultMethod}"/>
 
+                    <TextBlock Text="Overlay Display Method" Style="{StaticResource SectionTitle}"/>
+                    <ComboBox Width="200" HorizontalAlignment="Left"
+                              ItemsSource="{Binding OverlayDisplayMethods}"
+                              SelectedItem="{Binding OverlayDisplayMethod}"/>
+
                     <CheckBox Content="Auto-backup before overwriting configs" IsChecked="{Binding AutoBackup}" Margin="0,16,0,0"/>
 
                     <TextBlock Text="Max Backups to Keep" Style="{StaticResource SectionTitle}"/>

@@ -186,7 +186,7 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
         {
             // Do not set Owner — an owned window stays above the main app
             // but drops behind CS:GO the moment the game is focused.
-            _overlay = new OverlayWindow(State, Bots);
+            _overlay = CreateOverlayWindow();
             // Don't set _overlay to null on close since we use Hide() instead
             System.Diagnostics.Debug.WriteLine("Created new overlay window");
         }
@@ -205,6 +205,18 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
             State.SetStatus("Config generator overlay shown. ⚠️ Insecure mode required. F10 toggles.");
             System.Diagnostics.Debug.WriteLine("Overlay shown and activated");
         }
+    }
+
+    private OverlayWindow CreateOverlayWindow()
+    {
+        var displayMethod = State.Services.Settings.Current.OverlayDisplayMethod ?? "NormalWindow";
+        
+        return displayMethod switch
+        {
+            "TransparentWindow" => new OverlayWindow(State, Bots, OverlayStyle.Transparent),
+            "MinimalWindow" => new OverlayWindow(State, Bots, OverlayStyle.Minimal),
+            _ => new OverlayWindow(State, Bots, OverlayStyle.Normal)
+        };
     }
 
     public void Dispose()

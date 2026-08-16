@@ -12,6 +12,27 @@ using CSGOConfigManager.ViewModels;
 namespace CSGOConfigManager.Views;
 
 /// <summary>
+/// Overlay display style options for different appearance and behavior
+/// </summary>
+public enum OverlayStyle
+{
+    /// <summary>
+    /// Normal bordered window with solid background (most compatible with anti-cheat)
+    /// </summary>
+    Normal,
+    
+    /// <summary>
+    /// Transparent window with rounded corners (may trigger anti-cheat)
+    /// </summary>
+    Transparent,
+    
+    /// <summary>
+    /// Minimal window with reduced UI elements
+    /// </summary>
+    Minimal
+}
+
+/// <summary>
 /// Transparent always-on-top overlay that provides real-time CS:GO config management.
 /// All settings apply to all game mode config files.
 /// </summary>
@@ -19,6 +40,7 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
 {
     private readonly AppState _state;
     private readonly BotManagerViewModel _botManager;
+    private readonly OverlayStyle _style;
     private bool _svCheats = true;
     private bool _infiniteAmmo = true;
     private bool _grenadeTrajectory = true;
@@ -39,12 +61,16 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public OverlayWindow(AppState state, BotManagerViewModel botManager)
+    public OverlayWindow(AppState state, BotManagerViewModel botManager, OverlayStyle style = OverlayStyle.Normal)
     {
         InitializeComponent();
         _state = state;
         _botManager = botManager;
+        _style = style;
         DataContext = this;
+        
+        ApplyOverlayStyle();
+        
         ShowActivated = true;
         ShowInTaskbar = true;
         WindowStartupLocation = WindowStartupLocation.Manual;
@@ -55,6 +81,44 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         Loaded += OnLoaded;
         IsVisibleChanged += OnIsVisibleChanged;
         Closed += OnClosed;
+    }
+
+    private void ApplyOverlayStyle()
+    {
+        switch (_style)
+        {
+            case OverlayStyle.Transparent:
+                WindowStyle = WindowStyle.None;
+                AllowsTransparency = true;
+                Background = System.Windows.Media.Brushes.Transparent;
+                ShowInTaskbar = false;
+                MainBorder.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(204, 30, 30, 46));
+                MainBorder.CornerRadius = new System.Windows.CornerRadius(12);
+                MainBorder.BorderThickness = new System.Windows.Thickness(2);
+                MainBorder.BorderBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(222, 155, 53));
+                break;
+            case OverlayStyle.Minimal:
+                WindowStyle = WindowStyle.SingleBorderWindow;
+                AllowsTransparency = false;
+                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(30, 30, 46));
+                ShowInTaskbar = true;
+                MainBorder.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(30, 30, 46));
+                MainBorder.CornerRadius = new System.Windows.CornerRadius(0);
+                MainBorder.BorderThickness = new System.Windows.Thickness(0);
+                MainBorder.BorderBrush = System.Windows.Media.Brushes.Transparent;
+                break;
+            case OverlayStyle.Normal:
+            default:
+                WindowStyle = WindowStyle.SingleBorderWindow;
+                AllowsTransparency = false;
+                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(30, 30, 46));
+                ShowInTaskbar = true;
+                MainBorder.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(30, 30, 46));
+                MainBorder.CornerRadius = new System.Windows.CornerRadius(0);
+                MainBorder.BorderThickness = new System.Windows.Thickness(0);
+                MainBorder.BorderBrush = System.Windows.Media.Brushes.Transparent;
+                break;
+        }
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
@@ -105,7 +169,9 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         var hwnd = new WindowInteropHelper(this).Handle;
         if (hwnd == IntPtr.Zero)
             hwnd = new WindowInteropHelper(this).EnsureHandle();
-        GameWindowService.ForceTopmost(hwnd);
+        
+        var useAggressive = _style == OverlayStyle.Transparent;
+        GameWindowService.ForceTopmost(hwnd, useAggressive);
         Topmost = true;
     }
 
