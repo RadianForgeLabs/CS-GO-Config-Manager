@@ -12,27 +12,6 @@ using CSGOConfigManager.ViewModels;
 namespace CSGOConfigManager.Views;
 
 /// <summary>
-/// Overlay display style options for different appearance and behavior
-/// </summary>
-public enum OverlayStyle
-{
-    /// <summary>
-    /// Normal bordered window with solid background (most compatible with anti-cheat)
-    /// </summary>
-    Normal,
-    
-    /// <summary>
-    /// Transparent window with rounded corners (may trigger anti-cheat)
-    /// </summary>
-    Transparent,
-    
-    /// <summary>
-    /// Minimal window with reduced UI elements
-    /// </summary>
-    Minimal
-}
-
-/// <summary>
 /// Transparent always-on-top overlay that provides real-time CS:GO config management.
 /// All settings apply to all game mode config files.
 /// </summary>
@@ -40,7 +19,6 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
 {
     private readonly AppState _state;
     private readonly BotManagerViewModel _botManager;
-    private readonly OverlayStyle _style;
     private bool _svCheats = true;
     private bool _infiniteAmmo = true;
     private bool _grenadeTrajectory = true;
@@ -61,21 +39,20 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public OverlayWindow(AppState state, BotManagerViewModel botManager, OverlayStyle style = OverlayStyle.Normal)
+    public OverlayWindow(AppState state, BotManagerViewModel botManager)
     {
         InitializeComponent();
         _state = state;
         _botManager = botManager;
-        _style = style;
         DataContext = this;
         
-        // Force simple reliable window properties
-        WindowStyle = WindowStyle.SingleBorderWindow;
-        AllowsTransparency = false;
-        Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(30, 30, 46));
-        ShowActivated = true;
-        ShowInTaskbar = true;
-        WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        // Apply original transparent window behavior
+        WindowStyle = WindowStyle.None;
+        AllowsTransparency = true;
+        Background = System.Windows.Media.Brushes.Transparent;
+        ShowActivated = false;
+        ShowInTaskbar = false;
+        WindowStartupLocation = WindowStartupLocation.Manual;
         
         LoadFromConfigs();
 
@@ -84,15 +61,6 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         Loaded += OnLoaded;
         IsVisibleChanged += OnIsVisibleChanged;
         Closed += OnClosed;
-    }
-
-    private void ApplyOverlayStyle()
-    {
-        // Simplified - always use normal window for reliability
-        WindowStyle = WindowStyle.SingleBorderWindow;
-        AllowsTransparency = false;
-        Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(30, 30, 46));
-        ShowInTaskbar = true;
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
@@ -143,9 +111,9 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         var hwnd = new WindowInteropHelper(this).Handle;
         if (hwnd == IntPtr.Zero)
             hwnd = new WindowInteropHelper(this).EnsureHandle();
-        
-        var useAggressive = _style == OverlayStyle.Transparent;
-        GameWindowService.ForceTopmost(hwnd, false);
+
+        // Use aggressive topmost for transparent window (original behavior)
+        GameWindowService.ForceTopmost(hwnd, true);
         Topmost = true;
     }
 

@@ -184,59 +184,27 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
         
         if (_overlay is null)
         {
-            // Try different overlay creation methods
-            try
-            {
-                _overlay = CreateOverlayWindow();
-                System.Diagnostics.Debug.WriteLine("Created new overlay window");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Failed to create overlay: {ex.Message}");
-                State.SetStatus($"Failed to create overlay: {ex.Message}");
-                return;
-            }
+            // Do not set Owner — an owned window stays above the main app
+            // but drops behind CS:GO the moment the game is focused.
+            _overlay = new OverlayWindow(State, Bots);
+            // Don't set _overlay to null on close since we use Hide() instead
+            System.Diagnostics.Debug.WriteLine("Created new overlay window");
         }
 
-        try
+        if (_overlay.IsVisible)
         {
-            if (_overlay.IsVisible)
-            {
-                _overlay.Hide();
-                State.SetStatus("Overlay hidden. Press F10 to show.");
-                System.Diagnostics.Debug.WriteLine("Overlay hidden");
-            }
-            else
-            {
-                _overlay.Show();
-                _overlay.Topmost = true;
-                _overlay.WindowState = WindowState.Normal;
-                _overlay.BringIntoView();
-                _overlay.Activate();
-                State.SetStatus("Config generator overlay shown. ⚠️ Insecure mode required. F10 toggles.");
-                System.Diagnostics.Debug.WriteLine("Overlay shown and activated");
-            }
+            _overlay.Hide();
+            State.SetStatus("Overlay hidden. Press F10 to show.");
+            System.Diagnostics.Debug.WriteLine("Overlay hidden");
         }
-        catch (Exception ex)
+        else
         {
-            System.Diagnostics.Debug.WriteLine($"Failed to toggle overlay: {ex.Message}");
-            State.SetStatus($"Failed to toggle overlay: {ex.Message}");
+            _overlay.Show();
+            _overlay.Topmost = true;
+            _overlay.Activate(); // Bring overlay to front and give it focus
+            State.SetStatus("Config generator overlay shown. ⚠️ Insecure mode required. F10 toggles.");
+            System.Diagnostics.Debug.WriteLine("Overlay shown and activated");
         }
-    }
-
-    private OverlayWindow CreateOverlayWindow()
-    {
-        var displayMethod = State.Services.Settings.Current.OverlayDisplayMethod ?? "NormalWindow";
-        
-        // Force normal window for reliability
-        var overlay = new OverlayWindow(State, Bots, OverlayStyle.Normal);
-        
-        // Set explicit window properties
-        overlay.Topmost = true;
-        overlay.ShowActivated = true;
-        overlay.ShowInTaskbar = true;
-        
-        return overlay;
     }
 
     public void Dispose()
