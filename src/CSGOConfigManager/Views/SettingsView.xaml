@@ -12,7 +12,7 @@
                     <TextBlock Text="CS:GO Config Manager" FontWeight="SemiBold" FontSize="16" Foreground="{StaticResource AccentBrush}" Margin="0,0,0,4"/>
                     <TextBlock Text="Data-driven config manager for CS:GO Legacy (1.38.x)" Style="{StaticResource MutedText}" Margin="0,0,0,8"/>
                     <TextBlock Text="Developed by" Style="{StaticResource MutedText}" Margin="0,0,0,4"/>
-                    <TextBlock Text="RFL Studios" FontWeight="SemiBold" Foreground="#DE9B35" Margin="0,0,0,2"/>
+                    <TextBlock Text="RFL Entertainment" FontWeight="SemiBold" Foreground="#DE9B35" Margin="0,0,0,2"/>
                     <TextBlock Text="A division of RadianForgeLabs" Style="{StaticResource MutedText}" FontSize="12" Margin="0,0,0,8"/>
                     
                     <Button Content="Visit RadianForgeLabs Website" Command="{Binding VisitWebsiteCommand}" 

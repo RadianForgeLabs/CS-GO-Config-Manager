@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:CSGOConfigManager.ViewModels"
         xmlns:views="clr-namespace:CSGOConfigManager.Views"
-        Title="CS:GO Config Manager — RFL Studios"
+        Title="CS:GO Config Manager — RFL Entertainment"
         Height="780" Width="1200"
         MinHeight="600" MinWidth="960"
         WindowStartupLocation="CenterScreen">
@@ -49,7 +49,7 @@
                 <TextBlock Text="{Binding StatusMessage}"/>
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
-                <TextBlock Text="RFL Studios" Foreground="#88A0A0B8" FontSize="11" Margin="0,0,8,0"/>
+                <TextBlock Text="RFL Entertainment" Foreground="#88A0A0B8" FontSize="11" Margin="0,0,8,0"/>
             </StatusBarItem>
         </StatusBar>
 
@@ -60,7 +60,7 @@
                     <TextBlock Text="CS:GO" FontSize="20" FontWeight="Bold" Foreground="{StaticResource AccentBrush}"/>
                     <TextBlock Text="Config Manager" FontSize="13" Style="{StaticResource MutedText}"/>
                     <TextBlock Text="Legacy 1.38.x" FontSize="11" Style="{StaticResource MutedText}" Margin="0,4,0,0"/>
-                    <TextBlock Text="RFL Studios" FontSize="10" Foreground="#88A0A0B8" Margin="0,8,0,0"/>
+                    <TextBlock Text="RFL Entertainment" FontSize="10" Foreground="#88A0A0B8" Margin="0,8,0,0"/>
                 </StackPanel>
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto">

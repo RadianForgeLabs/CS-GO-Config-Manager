@@ -1,7 +1,7 @@
 <Window x:Class="CSGOConfigManager.Views.OverlayWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="CS:GO Config Manager — RFL Studios"
+        Title="CS:GO Config Manager — RFL Entertainment"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
@@ -20,7 +20,7 @@
                 <StackPanel>
                     <TextBlock Text="CS:GO Config Manager" FontWeight="Bold" FontSize="16"
                                Foreground="#DE9B35" VerticalAlignment="Center"/>
-                    <TextBlock Text="Practice Overlay — RFL Studios" Foreground="#88A0A0B8" FontSize="11" Margin="0,2,0,0"/>
+                    <TextBlock Text="Practice Overlay — RFL Entertainment" Foreground="#88A0A0B8" FontSize="11" Margin="0,2,0,0"/>
                 </StackPanel>
             </DockPanel>
 

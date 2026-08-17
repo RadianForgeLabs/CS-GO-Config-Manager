@@ -4,7 +4,7 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="8">
         <StackPanel>
             <TextBlock Text="Dashboard" Style="{StaticResource TitleText}"/>
-            <TextBlock Text="CS:GO Legacy (1.38.x) Config Manager — RFL Studios" Style="{StaticResource MutedText}" Margin="0,0,0,16"/>
+            <TextBlock Text="CS:GO Legacy (1.38.x) Config Manager — RFL Entertainment" Style="{StaticResource MutedText}" Margin="0,0,0,16"/>
 
             <UniformGrid Columns="2">
                 <Border Style="{StaticResource Card}" Margin="0,0,8,12">
@@ -67,7 +67,7 @@
                     <TextBlock Text="• Game Modes - Apply presets for different game modes" Style="{StaticResource MutedText}" Margin="0,0,0,4" TextWrapping="Wrap"/>
                     <TextBlock Text="• Overlay (F10) - Real-time config manager that applies to all game modes" Style="{StaticResource MutedText}" Margin="0,0,0,4" TextWrapping="Wrap"/>
                     <TextBlock Text="All settings apply to: Casual, Competitive, Deathmatch, Arms Race, Demolition, Cooperative, Custom, Practice, and Autoexec" Style="{StaticResource MutedText}" Margin="0,0,0,8" TextWrapping="Wrap"/>
-                    <TextBlock Text="Developed by RFL Studios, a division of RadianForgeLabs" Style="{StaticResource MutedText}" Foreground="#DE9B35" Margin="0,8,0,4" TextWrapping="Wrap"/>
+                    <TextBlock Text="Developed by RFL Entertainment, a division of RadianForgeLabs" Style="{StaticResource MutedText}" Foreground="#DE9B35" Margin="0,8,0,4" TextWrapping="Wrap"/>
                     <TextBlock Text="Based on original CS:GO Config Manager (MIT License)" Style="{StaticResource MutedText}" FontSize="10" Foreground="#88A0A0B8" Margin="0,0,0,0" TextWrapping="Wrap"/>
                 </StackPanel>
             </Border>
