@@ -11,7 +11,7 @@
                     <ComboBox ItemsSource="{Binding Methods}" SelectedItem="{Binding SelectedMethod}" 
                               Width="200" HorizontalAlignment="Left" Margin="0,0,0,8"/>
                     
-                    <CheckBox Content="Offline mode (-insecure)" IsChecked="{Binding Offline}" Margin="0,8,0,8"/>
+                    <CheckBox Content="Offline mode" IsChecked="{Binding Offline}" Margin="0,8,0,8"/>
                     
                     <TextBlock Text="Extra Arguments" Style="{StaticResource SectionTitle}" Margin="0,8,0,4"/>
                     <TextBox Text="{Binding ExtraArgs, UpdateSourceTrigger=PropertyChanged}" 
@@ -46,8 +46,6 @@
                     <TextBlock Text="• exe - Launches csgo.exe directly with borderless windowed mode for overlay compatibility" 
                                Style="{StaticResource MutedText}" TextWrapping="Wrap" Margin="0,4"/>
                     <TextBlock Text="• Borderless mode (-windowed -noborder) allows the overlay to display on top of the game" 
-                               Style="{StaticResource MutedText}" TextWrapping="Wrap" Margin="0,4"/>
-                    <TextBlock Text="• Offline mode adds -insecure flag (use for practice only)" 
                                Style="{StaticResource MutedText}" TextWrapping="Wrap" Margin="0,4"/>
                 </StackPanel>
             </Border>

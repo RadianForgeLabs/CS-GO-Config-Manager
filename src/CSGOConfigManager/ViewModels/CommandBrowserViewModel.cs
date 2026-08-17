@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows.Input;
 using CSGOConfigManager.Services;
 
@@ -90,31 +91,56 @@ public sealed class CommandBrowserViewModel : ViewModelBase
 
     public void Reload()
     {
-        var selectedName = Selected?.Name;
-        Commands.Clear();
-        var cfg = _state.CfgDirectory;
-
-        foreach (var def in _state.Services.Data.GetCommands().Where(c => !c.Hidden))
+        try
         {
-            if (Category is not null && Category != "(All)" &&
-                !string.Equals(def.Category, Category, StringComparison.OrdinalIgnoreCase))
-                continue;
+            var selectedName = Selected?.Name;
+            Commands.Clear();
+            var cfg = _state.CfgDirectory;
 
-            if (!string.IsNullOrWhiteSpace(Search) &&
-                !def.Name.Contains(Search, StringComparison.OrdinalIgnoreCase) &&
-                !def.Description.Contains(Search, StringComparison.OrdinalIgnoreCase) &&
-                !def.Category.Contains(Search, StringComparison.OrdinalIgnoreCase))
-                continue;
+            if (_state.Services.Data == null)
+            {
+                System.Windows.MessageBox.Show("Data service is not available.", "Reload Error",
+                    System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                return;
+            }
 
-            string? current = null;
-            if (!string.IsNullOrWhiteSpace(cfg))
-                current = _state.Services.Config.GetCurrentValue(cfg, def.Name, def.File);
+            var commands = _state.Services.Data.GetCommands();
+            if (commands == null)
+            {
+                System.Windows.MessageBox.Show("Unable to load commands data.", "Reload Error",
+                    System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                return;
+            }
 
-            Commands.Add(new CommandItemViewModel(def, current));
+            foreach (var def in commands.Where(c => !c.Hidden))
+            {
+                if (Category is not null && Category != "(All)" &&
+                    !string.Equals(def.Category, Category, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                if (!string.IsNullOrWhiteSpace(Search) &&
+                    !def.Name.Contains(Search, StringComparison.OrdinalIgnoreCase) &&
+                    !def.Description.Contains(Search, StringComparison.OrdinalIgnoreCase) &&
+                    !def.Category.Contains(Search, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                string? current = null;
+                if (!string.IsNullOrWhiteSpace(cfg) && _state.Services.Config != null)
+                    current = _state.Services.Config.GetCurrentValue(cfg, def.Name, def.File);
+
+                Commands.Add(new CommandItemViewModel(def, current));
+            }
+
+            if (selectedName is not null)
+                Selected = Commands.FirstOrDefault(c => c.Name == selectedName);
         }
-
-        if (selectedName is not null)
-            Selected = Commands.FirstOrDefault(c => c.Name == selectedName);
+        catch (Exception ex)
+        {
+            System.Windows.MessageBox.Show($"Error reloading commands: {ex.Message}\n\nStack Trace:\n{ex.StackTrace}",
+                "Reload Error",
+                System.Windows.MessageBoxButton.OK,
+                System.Windows.MessageBoxImage.Error);
+        }
     }
 
     private void Apply()

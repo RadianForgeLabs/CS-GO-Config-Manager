@@ -13,7 +13,6 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
     private string _currentPageName = "Home";
     private OverlayWindow? _overlay;
     private GlobalHotkeyService? _hotkeyService;
-    private bool _overlayInsecureWarningShown;
 
     public AppState State { get; }
 
@@ -108,14 +107,13 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
                     ToggleOverlay();
                 });
             };
-            State.SetStatus("F10 overlay ready. Launch CS:GO in Offline mode (-insecure) for the overlay to appear over the game.");
+            State.SetStatus("F10 overlay ready. Press F10 to toggle the overlay.");
         }
         catch (Exception ex)
         {
             State.SetStatus($"Failed to register global hotkey: {ex.Message}");
             System.Windows.MessageBox.Show(
                 $"Failed to register global F10 hotkey: {ex.Message}\n\n" +
-                "⚠️ The practice overlay requires CS:GO to be launched with -insecure (Launch Center → Offline mode).\n" +
                 "You can still toggle the overlay from the Overlay button in the navigation.",
                 "Hotkey Registration Failed",
                 System.Windows.MessageBoxButton.OK,
@@ -202,23 +200,12 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
             return;
         }
 
-        if (!_overlayInsecureWarningShown)
-        {
-            _overlayInsecureWarningShown = true;
-            System.Windows.MessageBox.Show(
-                "The practice overlay is a transparent always-on-top window.\n\n" +
-                "⚠️ Launch CS:GO in Offline mode (-insecure) or the overlay may be hidden or blocked.\n\n" +
-                "Use Launch Center → check “Offline mode (-insecure)” before launching.\n" +
-                "Insecure mode disables VAC — use it for offline / practice only. Do not join VAC-secured servers.",
-                "Insecure Mode Required",
-                System.Windows.MessageBoxButton.OK,
-                System.Windows.MessageBoxImage.Warning);
-        }
+
 
         _overlay.Show();
         _overlay.Topmost = true;
         _overlay.Activate();
-        State.SetStatus("Overlay shown. ⚠️ Insecure mode required. F10 toggles.");
+        State.SetStatus("Overlay shown. Press F10 to toggle.");
     }
 
     public void Dispose()

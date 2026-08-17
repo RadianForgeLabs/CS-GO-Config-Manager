@@ -20,16 +20,16 @@
             </Grid.ColumnDefinitions>
 
             <DataGrid Grid.Column="0" ItemsSource="{Binding Commands}"
-                      SelectedItem="{Binding Selected}" AutoGenerateColumns="False"
+                      SelectedItem="{Binding Selected, Mode=OneWayToSource}" AutoGenerateColumns="False"
                       IsReadOnly="True" HeadersVisibility="Column">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Command" Binding="{Binding Name}" Width="140"/>
-                    <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="90"/>
-                    <DataGridTextColumn Header="Default" Binding="{Binding DefaultValue}" Width="70"/>
+                    <DataGridTextColumn Header="Command" Binding="{Binding Name, Mode=OneWay}" Width="140"/>
+                    <DataGridTextColumn Header="Category" Binding="{Binding Category, Mode=OneWay}" Width="90"/>
+                    <DataGridTextColumn Header="Default" Binding="{Binding DefaultValue, Mode=OneWay}" Width="70"/>
                     <DataGridTextColumn Header="Current" Binding="{Binding CurrentValue}" Width="70"/>
-                    <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="60"/>
-                    <DataGridTextColumn Header="Flags" Binding="{Binding FlagsDisplay}" Width="90"/>
-                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                    <DataGridTextColumn Header="Type" Binding="{Binding Type, Mode=OneWay}" Width="60"/>
+                    <DataGridTextColumn Header="Flags" Binding="{Binding FlagsDisplay, Mode=OneWay}" Width="90"/>
+                    <DataGridTextColumn Header="Description" Binding="{Binding Description, Mode=OneWay}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
 
@@ -37,11 +37,11 @@
                 <DockPanel>
                     <StackPanel DockPanel.Dock="Top">
                         <TextBlock Text="Details" Style="{StaticResource SectionTitle}" Margin="0,0,0,8"/>
-                        <TextBlock Text="{Binding Selected.Name}" FontWeight="SemiBold" FontSize="16"/>
-                        <TextBlock Text="{Binding Selected.Description}" TextWrapping="Wrap" Style="{StaticResource MutedText}" Margin="0,6,0,0"/>
-                        <TextBlock Margin="0,8,0,0"><Run Text="File: "/><Run Text="{Binding Selected.File}"/></TextBlock>
-                        <TextBlock><Run Text="Modes: "/><Run Text="{Binding Selected.ModesDisplay}"/></TextBlock>
-                        <TextBlock><Run Text="Range: "/><Run Text="{Binding Selected.Min}"/><Run Text=" – "/><Run Text="{Binding Selected.Max}"/></TextBlock>
+                        <TextBlock Text="{Binding Selected.Name, Mode=OneWay}" FontWeight="SemiBold" FontSize="16"/>
+                        <TextBlock Text="{Binding Selected.Description, Mode=OneWay}" TextWrapping="Wrap" Style="{StaticResource MutedText}" Margin="0,6,0,0"/>
+                        <TextBlock Margin="0,8,0,0"><Run Text="File: "/><Run Text="{Binding Selected.File, Mode=OneWay}"/></TextBlock>
+                        <TextBlock><Run Text="Modes: "/><Run Text="{Binding Selected.ModesDisplay, Mode=OneWay}"/></TextBlock>
+                        <TextBlock><Run Text="Range: "/><Run Text="{Binding Selected.Min, Mode=OneWay}"/><Run Text=" – "/><Run Text="{Binding Selected.Max, Mode=OneWay}"/></TextBlock>
 
                         <TextBlock Text="Edit Value" Style="{StaticResource SectionTitle}"/>
                         <TextBox Text="{Binding EditValue, UpdateSourceTrigger=PropertyChanged}"/>

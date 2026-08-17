@@ -24,15 +24,6 @@
                 </StackPanel>
             </DockPanel>
 
-            <Border DockPanel.Dock="Top" Background="#33FF8B00" CornerRadius="6" Padding="8" Margin="0,0,0,12"
-                    BorderBrush="#DE9B35" BorderThickness="1">
-                <TextBlock TextWrapping="Wrap" Foreground="#FFD080" FontSize="11" FontWeight="SemiBold"
-                           Text="⚠️ Insecure mode required. Launch CS:GO with Offline mode (-insecure) or this overlay may be hidden or blocked. VAC-secure matches will not work."/>
-            </Border>
-
-            <TextBlock DockPanel.Dock="Bottom" Text="⚠️ Insecure Mode Required — F10 to toggle • Practice / offline only" 
-                       Foreground="#FF8B0000" FontSize="11" Margin="0,12,0,0" TextAlignment="Center" FontWeight="SemiBold"/>
-
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel>
                     <!-- Bot Configuration -->

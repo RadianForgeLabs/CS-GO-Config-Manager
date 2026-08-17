@@ -14,8 +14,6 @@ namespace CSGOConfigManager.Views;
 /// <summary>
 /// Transparent always-on-top overlay that provides real-time CS:GO config management.
 /// All settings apply to all game mode config files.
-/// ⚠️ Requires CS:GO to be launched in insecure mode (-insecure) for overlay visibility.
-/// VAC-secure matches will not work with overlay enabled.
 /// </summary>
 public partial class OverlayWindow : Window, INotifyPropertyChanged
 {
