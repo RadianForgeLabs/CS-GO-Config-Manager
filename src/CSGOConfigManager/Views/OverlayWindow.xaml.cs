@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -9,14 +8,14 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using CSGOConfigManager.Services;
 using CSGOConfigManager.ViewModels;
-using CSGOConfigManager.Core.Services;
 
 namespace CSGOConfigManager.Views;
 
 /// <summary>
-/// Desktop config generator window for CS:GO configuration management.
+/// Transparent always-on-top overlay that provides real-time CS:GO config management.
 /// All settings apply to all game mode config files.
-/// Use this window on desktop before launching the game.
+/// ⚠️ Requires CS:GO to be launched in insecure mode (-insecure) for overlay visibility.
+/// VAC-secure matches will not work with overlay enabled.
 /// </summary>
 public partial class OverlayWindow : Window, INotifyPropertyChanged
 {
@@ -30,7 +29,6 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
     private bool _godMode = false;
     private string _status = "Config Manager Ready";
     private bool _applying;
-    private DispatcherTimer? _topmostTimer;
 
     public BotManagerViewModel BotManager => _botManager;
     public bool SvCheats { get => _svCheats; set { _svCheats = value; OnPropertyChanged(); } }
@@ -50,19 +48,21 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         _botManager = botManager;
         DataContext = this;
         
-        // Apply normal window behavior (no topmost, normal desktop window)
-        ShowActivated = true;
-        ShowInTaskbar = true;
-        WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        // Apply original transparent window behavior
+        WindowStyle = WindowStyle.None;
+        AllowsTransparency = true;
+        Background = System.Windows.Media.Brushes.Transparent;
+        ShowActivated = false;
+        ShowInTaskbar = false;
+        WindowStartupLocation = WindowStartupLocation.Manual;
         
         LoadFromConfigs();
+
+        Topmost = true;
 
         Loaded += OnLoaded;
         IsVisibleChanged += OnIsVisibleChanged;
         Closed += OnClosed;
-        
-        // Remove the topmost enforcement timer since we're not trying to be an overlay
-        _topmostTimer = null;
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
@@ -79,42 +79,25 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         
         // Force window to be topmost
         Topmost = true;
-        
-        // Force the window to appear and stay on top
-        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() =>
-        {
-            Topmost = true;
-            Activate();
-            BringIntoView();
-        }));
     }
 
     private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
-        // No special visibility handling needed for desktop window
-        // Just show/hide normally
+        if (IsVisible)
+        {
+            ApplyTopmostChrome();
+            CompositionTarget.Rendering -= OnRendering;
+            CompositionTarget.Rendering += OnRendering;
+        }
+        else
+        {
+            CompositionTarget.Rendering -= OnRendering;
+        }
     }
 
     private void OnClosed(object? sender, EventArgs e)
     {
         CompositionTarget.Rendering -= OnRendering;
-        _topmostTimer?.Stop();
-    }
-
-    private void EnforceTopmost()
-    {
-        if (!IsVisible) return;
-        
-        var hwnd = new WindowInteropHelper(this).Handle;
-        if (hwnd != IntPtr.Zero)
-        {
-            // Force the window to be topmost using Windows API
-            NativeMethods.SetWindowPos(
-                hwnd,
-                NativeMethods.HWND_TOPMOST,
-                0, 0, 0, 0,
-                NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE);
-        }
     }
 
     private void OnRendering(object? sender, EventArgs e) => ApplyTopmostChrome();
@@ -166,7 +149,7 @@ public partial class OverlayWindow : Window, INotifyPropertyChanged
         }
     }
 
-    private void OnClose(object sender, RoutedEventArgs e) => Close();
+    private void OnClose(object sender, RoutedEventArgs e) => Hide();
 
     private void OnBotSettingChanged(object sender, RoutedEventArgs e)
     {

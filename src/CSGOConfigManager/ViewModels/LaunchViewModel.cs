@@ -89,10 +89,11 @@ public sealed class LaunchViewModel : ViewModelBase
 
         try
         {
-            var result = _state.Services.Launch.Launch(_selectedMethod, _state.Installation, _state.Services.Settings.Current, _extraArgs);
+            var extra = ExtraArgs?.Trim();
+            var result = _state.Services.Launch.Launch(_selectedMethod, _state.Installation, _state.Services.Settings.Current, extra);
             LastResult = result.Message;
             _state.SetStatus(LastResult);
-            
+
             if (!result.Success)
             {
                 System.Windows.MessageBox.Show(result.Message, "Launch Failed",
@@ -138,9 +139,6 @@ public sealed class LaunchViewModel : ViewModelBase
                 return;
             }
 
-            // Apply profile settings before launching
-            _state.Services.Profiles.ApplyProfile(profile, _state.CfgDirectory);
-            
             var result = _state.Services.Launch.Launch(_selectedMethod, _state.Installation, _state.Services.Settings.Current, _extraArgs);
             LastResult = result.Message;
             _state.SetStatus(LastResult);

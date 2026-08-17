@@ -13,6 +13,7 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
     private string _currentPageName = "Home";
     private OverlayWindow? _overlay;
     private GlobalHotkeyService? _hotkeyService;
+    private bool _overlayInsecureWarningShown;
 
     public AppState State { get; }
 
@@ -96,18 +97,6 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
         NavigateCommand = new RelayCommand(p => Navigate(p?.ToString() ?? "Home"));
         ToggleOverlayCommand = new RelayCommand(ToggleOverlay);
 
-        // Pre-create overlay on startup to avoid creation issues when game has focus
-        try
-        {
-            _overlay = new OverlayWindow(State, Bots);
-            _overlay.Closed += (_, _) => _overlay = null;
-            System.Diagnostics.Debug.WriteLine("Overlay pre-created on startup");
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"Failed to pre-create overlay: {ex.Message}");
-        }
-
         // Register global F10 hotkey (works even when CS:GO has focus)
         try
         {
@@ -119,12 +108,18 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
                     ToggleOverlay();
                 });
             };
-            State.SetStatus("Global F10 hotkey registered successfully. Desktop config generator available.");
+            State.SetStatus("F10 overlay ready. Launch CS:GO in Offline mode (-insecure) for the overlay to appear over the game.");
         }
         catch (Exception ex)
         {
             State.SetStatus($"Failed to register global hotkey: {ex.Message}");
-            System.Windows.MessageBox.Show($"Failed to register global F10 hotkey: {ex.Message}\n\n⚠️ IMPORTANT: The overlay requires CS:GO to be in windowed mode.\nSet \"Display Mode\" to \"Windowed\" or \"Windowed Fullscreen\" in CS:GO Video Settings.\nYou can still toggle the overlay using the Overlay button in the navigation.", "Hotkey Registration Failed", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+            System.Windows.MessageBox.Show(
+                $"Failed to register global F10 hotkey: {ex.Message}\n\n" +
+                "⚠️ The practice overlay requires CS:GO to be launched with -insecure (Launch Center → Offline mode).\n" +
+                "You can still toggle the overlay from the Overlay button in the navigation.",
+                "Hotkey Registration Failed",
+                System.Windows.MessageBoxButton.OK,
+                System.Windows.MessageBoxImage.Warning);
         }
 
         Navigate("Home");
@@ -193,40 +188,37 @@ public sealed class MainViewModel : ViewModelBase, IDisposable
 
     private void ToggleOverlay()
     {
-        System.Diagnostics.Debug.WriteLine($"ToggleOverlay called at {DateTime.Now:HH:mm:ss.fff}");
-        
-        // If overlay doesn't exist, create it
-        if (_overlay == null)
+        if (_overlay is null)
         {
-            try
-            {
-                _overlay = new OverlayWindow(State, Bots);
-                _overlay.Closed += (_, _) => _overlay = null;
-                System.Diagnostics.Debug.WriteLine("Created new overlay window");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Failed to create overlay: {ex.Message}");
-                State.SetStatus($"Failed to create overlay: {ex.Message}");
-                return;
-            }
+            // Do not set Owner — an owned window stays above the main app
+            // but drops behind CS:GO the moment the game is focused.
+            _overlay = new OverlayWindow(State, Bots);
         }
-        
-        // Toggle visibility
+
         if (_overlay.IsVisible)
         {
-            _overlay.Close();
-            _overlay = null;
-            State.SetStatus("Config generator closed. Press F10 to open.");
-            System.Diagnostics.Debug.WriteLine("Overlay closed");
+            _overlay.Hide();
+            State.SetStatus("Overlay hidden. Press F10 to show.");
+            return;
         }
-        else
+
+        if (!_overlayInsecureWarningShown)
         {
-            _overlay.Show();
-            _overlay.Activate();
-            State.SetStatus("Desktop config generator shown. Configure settings, then alt+tab to game.");
-            System.Diagnostics.Debug.WriteLine("Overlay shown");
+            _overlayInsecureWarningShown = true;
+            System.Windows.MessageBox.Show(
+                "The practice overlay is a transparent always-on-top window.\n\n" +
+                "⚠️ Launch CS:GO in Offline mode (-insecure) or the overlay may be hidden or blocked.\n\n" +
+                "Use Launch Center → check “Offline mode (-insecure)” before launching.\n" +
+                "Insecure mode disables VAC — use it for offline / practice only. Do not join VAC-secured servers.",
+                "Insecure Mode Required",
+                System.Windows.MessageBoxButton.OK,
+                System.Windows.MessageBoxImage.Warning);
         }
+
+        _overlay.Show();
+        _overlay.Topmost = true;
+        _overlay.Activate();
+        State.SetStatus("Overlay shown. ⚠️ Insecure mode required. F10 toggles.");
     }
 
     public void Dispose()

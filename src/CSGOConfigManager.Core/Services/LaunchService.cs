@@ -34,22 +34,20 @@ public sealed class LaunchService
             return LaunchResult.Fail("csgo.exe not found. Set the CS:GO path in Settings.");
 
         var args = definition?.Args ?? string.Empty;
+
+        // Borderless windowed so the transparent overlay can sit on top of the game.
+        args = AppendArg(args, "-windowed");
+        args = AppendArg(args, "-noborder");
         
-        // Add borderless windowed mode args for overlay compatibility
-        // -windowed -noborder makes the game run in borderless windowed mode
-        // which allows the WPF overlay to show on top
-        // This does NOT require insecure mode, so match creation should work
-        var borderlessArgs = "-windowed -noborder";
-        if (string.IsNullOrWhiteSpace(args))
-            args = borderlessArgs;
-        else if (!args.Contains("-windowed", StringComparison.OrdinalIgnoreCase))
-            args = args + " " + borderlessArgs;
+        // Always add insecure mode for overlay compatibility
+        // Note: This prevents match creation, use for practice only
+        args = AppendArg(args, "-insecure");
 
         if (!string.IsNullOrWhiteSpace(settings.CustomLaunchArgs))
-            args = args + " " + settings.CustomLaunchArgs.Trim();
+            args = AppendArgs(args, settings.CustomLaunchArgs);
 
         if (!string.IsNullOrWhiteSpace(extraArgs))
-            args = args + " " + extraArgs.Trim();
+            args = AppendArgs(args, extraArgs);
 
         Process.Start(new ProcessStartInfo
         {
@@ -71,19 +69,13 @@ public sealed class LaunchService
         if (string.IsNullOrWhiteSpace(exe) || !File.Exists(exe))
             return LaunchResult.Fail("7Launcher not found. Set the 7Launcher path in Settings.");
 
-        var args = string.Empty;
-
-        // Add borderless windowed mode args for overlay compatibility
-        // -windowed -noborder makes the game run in borderless windowed mode
-        // which allows the WPF overlay to show on top
-        // This does NOT require insecure mode, so match creation should work
-        args = "-windowed -noborder";
+        var args = "-windowed -noborder -insecure";
 
         if (!string.IsNullOrWhiteSpace(settings.CustomLaunchArgs))
-            args = args + " " + settings.CustomLaunchArgs.Trim();
+            args = AppendArgs(args, settings.CustomLaunchArgs);
 
         if (!string.IsNullOrWhiteSpace(extraArgs))
-            args = args + " " + extraArgs.Trim();
+            args = AppendArgs(args, extraArgs);
 
         Process.Start(new ProcessStartInfo
         {
@@ -120,6 +112,22 @@ public sealed class LaunchService
         });
 
         return LaunchResult.Ok($"Launched RevLoader: {exe}");
+    }
+
+    private static string AppendArgs(string current, string extra)
+    {
+        foreach (var token in extra.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            current = AppendArg(current, token);
+        return current;
+    }
+
+    private static string AppendArg(string current, string arg)
+    {
+        if (string.IsNullOrWhiteSpace(arg))
+            return current;
+        if (current.Contains(arg, StringComparison.OrdinalIgnoreCase))
+            return current;
+        return string.IsNullOrWhiteSpace(current) ? arg : current + " " + arg;
     }
 }
 
