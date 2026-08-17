@@ -1,8 +1,10 @@
+using System.Runtime.Versioning;
 using CSGOConfigManager.Core.Models;
 using CSGOConfigManager.Core.Services;
 
 namespace CSGOConfigManager.Tests;
 
+[SupportedOSPlatform("windows")]
 public class GameDetectionTests
 {
     [Fact]

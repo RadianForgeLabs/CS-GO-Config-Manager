@@ -62,7 +62,18 @@ public sealed class CommandDefinition
         };
     }
 
-    public bool AppliesToMode(string mode) =>
-        Modes.Count == 0 ||
-        Modes.Any(m => string.Equals(m, mode, StringComparison.OrdinalIgnoreCase));
+    public bool AppliesToMode(string mode)
+    {
+        if (Modes.Count == 0)
+            return true;
+
+        // Handle "Custom/Practice" as a combined mode that matches both "Custom" and "Practice"
+        if (string.Equals(mode, "Custom/Practice", StringComparison.OrdinalIgnoreCase))
+        {
+            return Modes.Any(m => string.Equals(m, "Custom", StringComparison.OrdinalIgnoreCase) ||
+                                   string.Equals(m, "Practice", StringComparison.OrdinalIgnoreCase));
+        }
+
+        return Modes.Any(m => string.Equals(m, mode, StringComparison.OrdinalIgnoreCase));
+    }
 }

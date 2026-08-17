@@ -155,6 +155,20 @@ public sealed class ConfigService
 
     public string? GetCurrentValue(string cfgDirectory, string commandName, string? preferredFile = null)
     {
+        // First, check the command's default file (where values are written)
+        var command = _dataService.FindCommand(commandName);
+        if (command is not null)
+        {
+            var commandPath = GetConfigPath(cfgDirectory, command.File);
+            if (File.Exists(commandPath))
+            {
+                var value = Load(commandPath).GetValue(commandName);
+                if (value is not null)
+                    return value;
+            }
+        }
+
+        // Then, check the preferred file if specified
         if (!string.IsNullOrWhiteSpace(preferredFile))
         {
             var preferredPath = GetConfigPath(cfgDirectory, preferredFile);
@@ -162,18 +176,6 @@ public sealed class ConfigService
             {
                 var doc = Load(preferredPath);
                 var value = doc.GetValue(commandName);
-                if (value is not null)
-                    return value;
-            }
-        }
-
-        var command = _dataService.FindCommand(commandName);
-        if (command is not null)
-        {
-            var path = GetConfigPath(cfgDirectory, command.File);
-            if (File.Exists(path))
-            {
-                var value = Load(path).GetValue(commandName);
                 if (value is not null)
                     return value;
             }

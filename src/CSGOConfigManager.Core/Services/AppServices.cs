@@ -1,8 +1,11 @@
+using System.Runtime.Versioning;
+
 namespace CSGOConfigManager.Core.Services;
 
 /// <summary>
 /// Simple composition root for core services (no DI container required).
 /// </summary>
+[SupportedOSPlatform("windows")]
 public sealed class AppServices
 {
     public AppPaths Paths { get; }

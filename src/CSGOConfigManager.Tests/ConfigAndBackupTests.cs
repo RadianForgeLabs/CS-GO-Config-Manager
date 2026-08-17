@@ -1,7 +1,9 @@
+using System.Runtime.Versioning;
 using CSGOConfigManager.Core.Services;
 
 namespace CSGOConfigManager.Tests;
 
+[SupportedOSPlatform("windows")]
 public class ConfigAndBackupTests : IDisposable
 {
     private readonly string _root;
