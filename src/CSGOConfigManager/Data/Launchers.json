@@ -6,7 +6,7 @@
   },
   "7launcher": {
     "name": "7Launcher",
-    "exe": "7launcher.exe",
+    "exe": "Run_CS2.exe",
     "args": "--run csgo"
   },
   "exe": {

@@ -45,7 +45,7 @@ public sealed class SettingsViewModel : ViewModelBase
 
         SaveCommand = new RelayCommand(Save);
         BrowseCsgoCommand = new RelayCommand(() => BrowseFolder(p => CsgoPath = p));
-        BrowseSevenLauncherCommand = new RelayCommand(() => BrowseFile(p => SevenLauncherPath = p, "7Launcher|7launcher.exe|Executables|*.exe"));
+        BrowseSevenLauncherCommand = new RelayCommand(() => BrowseFile(p => SevenLauncherPath = p, "Run_CS2|Run_CS2.exe|Executables|*.exe"));
         BrowseRevLoaderCommand = new RelayCommand(() => BrowseFile(p => RevLoaderPath = p, "RevLoader|revLoader.exe|Executables|*.exe"));
         DetectCommand = new RelayCommand(() =>
         {
